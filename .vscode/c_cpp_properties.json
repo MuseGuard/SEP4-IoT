@@ -1,0 +1,66 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "c:/Users/Bozhidar Manev/Documents/GitHub/SEP4-IoT/include",
+                "c:/Users/Bozhidar Manev/Documents/GitHub/SEP4-IoT/src",
+                "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/cores/MegaCore",
+                "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/variants/100-pin-arduino-mega",
+                "c:/Users/Bozhidar Manev/Documents/GitHub/SEP4-IoT/lib/drivers",
+                "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/AVR_examples/src",
+                "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/EEPROM/src",
+                "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/Optiboot_flasher/src",
+                "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/SD/src",
+                "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/SPI/src",
+                "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/Servo/src",
+                "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/SoftwareSerial/src",
+                "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/Timer/src",
+                "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/Wire/src",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "c:/Users/Bozhidar Manev/Documents/GitHub/SEP4-IoT/include",
+                    "c:/Users/Bozhidar Manev/Documents/GitHub/SEP4-IoT/src",
+                    "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/cores/MegaCore",
+                    "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/variants/100-pin-arduino-mega",
+                    "c:/Users/Bozhidar Manev/Documents/GitHub/SEP4-IoT/lib/drivers",
+                    "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/AVR_examples/src",
+                    "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/EEPROM/src",
+                    "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/Optiboot_flasher/src",
+                    "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/SD/src",
+                    "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/SPI/src",
+                    "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/Servo/src",
+                    "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/SoftwareSerial/src",
+                    "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/Timer/src",
+                    "C:/Users/Bozhidar Manev/.platformio/packages/framework-arduino-avr-megacore/libraries/Wire/src",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=60111",
+                "ARDUINO_AVR_ATmega2560",
+                "F_CPU=16000000L",
+                "ARDUINO_ARCH_AVR",
+                "ARDUINO=10808",
+                "__AVR_ATmega2560__",
+                ""
+            ],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++17",
+            "compilerPath": "C:/Users/Bozhidar Manev/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe",
+            "compilerArgs": [
+                "-mmcu=atmega2560",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}
