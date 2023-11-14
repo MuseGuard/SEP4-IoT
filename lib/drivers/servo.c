@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST
 #include <servo.h>
 #include "includes.h"
 
@@ -51,3 +52,4 @@ void servo(uint8_t angle)
    TCCR2A =TCCR2A_state ; //finished borrowing timer2. 
    TCCR2B =TCCR2B_state ; //
 }
+#endif

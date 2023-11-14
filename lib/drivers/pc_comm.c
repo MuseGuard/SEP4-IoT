@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST
 #include "pc_comm.h"
 #include "includes.h"
 
@@ -19,3 +20,4 @@ void pc_comm_send_string_blocking(char * string){
 void pc_comm_send_array_nonBlocking(uint8_t * data, uint16_t length){
     uart_send_array_nonBlocking(USART_PC_COMM, data,  length);
 }
+#endif
