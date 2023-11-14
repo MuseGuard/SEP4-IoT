@@ -54,7 +54,8 @@ const static uint8_t hex_digits[] = {
     0b00011011, // Index 35 (0x23): Z
     0b01000000, // Index 36 (0x24): '-' (Negative sign)
     0b00000000, // Index 37 (0x25): ' '(Empty space)
-    0b10000000  // Index 38 (0x26): '.' (Decimal point)
+    0b10000000,  // Index 38 (0x26): '.' (Decimal point)
+    0b00001000,  // Index 39 (0x27): '_' (Underscore)
 };
 
 uint8_t static display_data[] = {0x3, 0x3, 0x3, 0x3};

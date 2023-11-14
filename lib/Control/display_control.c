@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST
 #include "display_control.h"
 #include "display.h"
 #include "pc_comm.h"
@@ -13,10 +14,9 @@ void display_control_write_word(char *word) {
   uint8_t nums_len = (uint8_t)strlen(word);
 
   if (nums_len < 4) {
-    /* Creating a temprorary array with 4 elements. Fill the first lemenets with
-    the values from nums, and the rest with 37 (space) */
-    uint8_t *temp = malloc(4 * sizeof(uint8_t));
-    for (uint8_t i = 0; i < 4; i++) {
+    /* Creating a temprorary array with 4 elements. Fill the first lemenets
+    with the values from nums, and the rest with 37 (space) */ uint8_t *temp
+    = malloc(4 * sizeof(uint8_t)); for (uint8_t i = 0; i < 4; i++) {
       if (i < nums_len) {
         temp[i] = nums[i];
       } else {
@@ -33,7 +33,8 @@ void display_control_write_word(char *word) {
     _delay_ms(1000);
   }
 
-  free(nums); // Clean up memory
+  display_setValues(37, 37, 37, 37); // Clear the display (show 4 spaces
+  free(nums);                        // Clean up memory
 }
 
 uint8_t *display_control_convert_word_to_numbers(char *word) {
@@ -62,7 +63,9 @@ uint8_t *display_control_convert_word_to_numbers(char *word) {
       case '.':
         numeric_value = 38;
         break;
-
+      case '_':
+        numeric_value = 39;
+        break;
       default:
         break;
       }
@@ -71,3 +74,25 @@ uint8_t *display_control_convert_word_to_numbers(char *word) {
   }
   return result;
 }
+
+void display_control_show_pin_code_position(uint8_t *pin_code,
+                                            uint8_t current_position) {
+  switch (current_position) {
+  case 0:
+    display_setValues(39, pin_code[1], pin_code[2], pin_code[3]);
+    break;
+  case 1:
+    display_setValues(pin_code[0], 39, pin_code[2], pin_code[3]);
+    break;
+  case 2:
+    display_setValues(pin_code[0], pin_code[1], 39, pin_code[3]);
+    break;
+  case 3:
+    display_setValues(pin_code[0], pin_code[1], pin_code[2], 39);
+    break;
+  default:
+    break;
+  }
+  _delay_ms(1);
+}
+#endif

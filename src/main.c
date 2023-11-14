@@ -1,18 +1,18 @@
-#include <Arduino.h>
+#include "buttons.h"
+#include "buttons_control.h"
+#include "display.h"
+#include "display_control.h"
+#include "pc_comm.h"
+#include "security_system_control.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-// put function declarations here:
-int myFunction(int, int);
-
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+int main(int argc, char const *argv[]) {
+  display_init();
+  buttons_init();
+  pc_comm_init(9600, NULL);
+  security_system_control_unlock();
+  pc_comm_send_string_blocking("Hello world\n");
+  /* code */
+  return 0;
 }
