@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST
 #include "pir.h"
 #include "includes.h"
 
@@ -59,3 +60,4 @@ DDR_Gnd|=(1<<P_Gnd);
     // Enable global interrupts
     sei();
 }
+#endif
