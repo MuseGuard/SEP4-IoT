@@ -5,11 +5,13 @@
 #include "wifi.h"
 #include <stdio.h>
 #include <util/delay.h>
+#include"package_builder.h"
 
 int main() {
   pc_comm_init(9600, NULL);
   connection_controller_init();
-  connection_controller_transmit("Hello World!", 13);
+  Package package = package_builder_build();
+  connection_controller_transmit(package.data, package.size);
   return 0;
 }
 
