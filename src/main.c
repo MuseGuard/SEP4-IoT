@@ -1,3 +1,4 @@
+#include "connection_controller.h"
 #include "dht11.h"
 #include "display.h"
 #include "pc_comm.h"
@@ -6,11 +7,19 @@
 #include <util/delay.h>
 
 int main() {
+  pc_comm_init(9600, NULL);
+  connection_controller_init();
+  connection_controller_transmit("Hello World!", 13);
+  return 0;
+}
+
+/*
+
+int main() {
   // display_init();
   // int i = 0;
   pc_comm_init(9600, NULL);
   wifi_init();
-  dht11_init();
   wifi_command_join_AP("madinnit", "12345678");
   // // WIFI_ERROR_MESSAGE_t message =
   wifi_command_create_TCP_connection("192.168.90.98", 23, NULL, NULL);
@@ -61,3 +70,5 @@ int main() {
   }
   return 0;
 }
+
+*/
