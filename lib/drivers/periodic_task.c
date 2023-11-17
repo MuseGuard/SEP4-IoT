@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST
 /**
  * @file periodic_task.c
  * @brief Periodic Task Driver implementation for ATmega2560
@@ -133,4 +134,4 @@ void timer_init_c(void (*user_function_c)(void), uint32_t interval_ms_c) {
 float get_exact_interval_a(void) {
     return ((float)(OCR3A + 1) / (F_CPU / 1024)) * 1000.0;
 }
-
+#endif

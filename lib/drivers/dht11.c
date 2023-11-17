@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST
 #include "dht11.h"
 #include "includes.h"
 
@@ -99,3 +100,4 @@ DHT11_ERROR_MESSAGE_t dht11_get(uint8_t* humidity_integer, uint8_t*  humidity_de
         return DHT11_FAIL;
 	}
 }
+#endif

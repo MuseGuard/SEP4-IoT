@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST
 #include "display.h"
 #include "includes.h"
 //LATCH
@@ -160,3 +161,4 @@ void pulse_latch()
     LATCH_PORT &= ~(1 << LATCH_BIT);
     // _delay_us(1);
 }
+#endif

@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST
 #include "tone.h"
 #include "includes.h"
 
@@ -108,3 +109,4 @@ void tone_play_starwars(){
     tone_play(440, 150);  // A4 for 150 ms
     tone_play(392, 1000); // G4 for 1000 ms
 }
+#endif

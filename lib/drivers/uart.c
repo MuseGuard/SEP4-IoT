@@ -1,5 +1,5 @@
-#ifndef EXCLUDE_UART
-
+#ifndef WINDOWS_TEST
+// #ifndef EXCLUDE_UART
 
 #include "uart.h"
 #include <stdint.h>
