@@ -37,5 +37,5 @@ bool connection_controller_init(void) {
     wifi_command_create_TCP_connection("192.168.90.98", 23, NULL, NULL); */
 }
 bool connection_controller_transmit(char *package, int length) {
-  wifi_command_TCP_transmit(package, length);
+  wifi_command_TCP_transmit((uint8_t *)package, length);
 }
