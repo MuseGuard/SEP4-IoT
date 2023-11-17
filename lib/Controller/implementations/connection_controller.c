@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <util/delay.h>
+// #include "package_builder.h"
 
 bool connection_controller_init(void) {
   _delay_ms(3000);
@@ -36,6 +37,6 @@ bool connection_controller_init(void) {
   /*   wifi_command_join_AP("XR", "12345678");
     wifi_command_create_TCP_connection("192.168.90.98", 23, NULL, NULL); */
 }
-bool connection_controller_transmit(char *package, int length) {
-  wifi_command_TCP_transmit((uint8_t *)package, length);
+bool connection_controller_transmit(Package package) {
+  wifi_command_TCP_transmit((uint8_t *)package.data, package.size);
 }

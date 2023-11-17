@@ -1,24 +1,23 @@
 #include "connection_controller.h"
-#include "dht11.h"
-#include "display.h"
 #include "measurements_controller.h"
+#include "monitoring_system_control.h"
 #include "package_builder.h"
 #include "pc_comm.h"
-#include "wifi.h"
+#include "periodic_task.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <util/delay.h>
 
 int main() {
+  _delay_ms(3000);
   pc_comm_init(9600, NULL);
-  /* connection_controller_init();
-  Package package = package_builder_build();
-  connection_controller_transmit(package.data, package.size); */
   measurements_controller_init();
-  char *str = measurements_controller_get_temperature_and_humididty();
-  pc_comm_send_string_blocking(str);
-  char *str2 = measurements_controller_get_lightlevels();
-  pc_comm_send_string_blocking(str2);
+  connection_controller_init();
+
+  timer_init_a(monitoring_system_control_execute, 5000);
+  while (1) {
+  }
 
   return 0;
 }

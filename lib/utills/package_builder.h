@@ -7,6 +7,5 @@ typedef struct {
   uint8_t size;
 } Package;
 
-Package package_builder_build(uint8_t temperature_integer,
-                              uint8_t temperature_decimal,
-                              uint8_t humidity_integer, uint16_t light);
+Package package_builder_build(char *temperature_and_humidity,
+                              char *light_levels);
