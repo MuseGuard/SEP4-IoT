@@ -1,15 +1,24 @@
 #include "connection_controller.h"
-#include "dht11.h"
-#include "display.h"
+#include "measurements_controller.h"
+#include "monitoring_system_control.h"
+#include "package_builder.h"
 #include "pc_comm.h"
-#include "wifi.h"
+#include "periodic_task.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include <util/delay.h>
 
 int main() {
+  _delay_ms(3000);
   pc_comm_init(9600, NULL);
+  measurements_controller_init();
   connection_controller_init();
-  connection_controller_transmit("Hello World!", 13);
+
+  timer_init_a(monitoring_system_controller_execute, 5000);
+  while (1) {
+  }
+
   return 0;
 }
 
