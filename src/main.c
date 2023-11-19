@@ -15,7 +15,7 @@ int main() {
   measurements_controller_init();
   connection_controller_init();
 
-  timer_init_a(monitoring_system_control_execute, 5000);
+  timer_init_a(monitoring_system_controller_execute, 5000);
   while (1) {
   }
 

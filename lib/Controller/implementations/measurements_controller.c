@@ -13,7 +13,7 @@ void measurements_controller_init() {
   light_init();
 }
 
-uint8_t *measurements_controller_get_temperature_and_humididty() {
+uint8_t *measurements_controller_get_temperature_and_humidity() {
   uint8_t temperature_integer, temperature_decimal, humidity_integer,
       humidity_decimal;
   uint8_t *measurements = malloc(3 * sizeof(uint8_t));
@@ -22,7 +22,7 @@ uint8_t *measurements_controller_get_temperature_and_humididty() {
     measurements[0] = temperature_integer;
     measurements[1] = temperature_decimal;
     measurements[2] = humidity_integer;
-  return measurements;
   }
+    return measurements;
 }
 uint16_t measurements_controller_get_lightlevels() { return light_read(); }
