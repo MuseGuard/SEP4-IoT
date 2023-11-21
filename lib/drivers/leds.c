@@ -1,4 +1,3 @@
-#ifndef WINDOWS_TEST
 #include "leds.h"
 #include "includes.h"
 
@@ -75,4 +74,3 @@ case 4:
  }
 
 }
-#endif

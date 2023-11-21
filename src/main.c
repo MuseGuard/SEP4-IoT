@@ -7,10 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <util/delay.h>
 
 int main() {
-  _delay_ms(3000);
   pc_comm_init(9600, NULL);
   measurements_controller_init();
   connection_controller_init();
