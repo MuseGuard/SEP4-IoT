@@ -19,7 +19,8 @@ void monitoring_system_controller_init() //Initializes all sensors
 void monitoring_system_controller_execute() //Getting data from all sensors and transmitimg over wifi
 {
 
-  dht11_get(&temperature_integer, &temperature_decimal, &humidity_integer, &humidity_decimal);
+  dht11_get(&humidity_integer, &humidity_decimal ,& temperature_integer,
+            &temperature_decimal);
   light_levels = light_read();
 
   // Give the package a new value

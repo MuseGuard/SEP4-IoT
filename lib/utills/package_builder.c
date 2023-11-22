@@ -13,6 +13,7 @@ Package package_builder_build(int8_t temperature_integer, uint8_t temperature_de
   sprintf(str, "T=%d.%d/H=%d/L=%d\n", temperature_integer, temperature_decimal, humidity_integer, light_levels);
 
   strcpy(package.data, str);
+  package.size = strlen(package.data);
   // pc_comm_send_string_blocking(&package);
   return package;
 }
