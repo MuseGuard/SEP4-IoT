@@ -5,11 +5,8 @@
 #include "periodic_task.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <util/delay.h>
 
 int main() {
-  _delay_ms(3000);
   pc_comm_init(9600, NULL);
   monitoring_system_controller_init();
   connection_controller_init();

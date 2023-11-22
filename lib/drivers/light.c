@@ -1,4 +1,3 @@
-#ifndef WINDOWS_TEST
 /**
  * @file light.c
  * @brief Photoresistor driver implementation for ATmega2560
@@ -65,4 +64,3 @@ uint32_t timeout = 40000;//if 2cc for incrementing and evaluation the timeout is
 
     return adc_value;
 }
-#endif
