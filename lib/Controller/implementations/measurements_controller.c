@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST
 #include "measurements_controller.h"
 #include "dht11.h"
 #include "light.h"
@@ -26,3 +27,4 @@ uint8_t *measurements_controller_get_temperature_and_humidity() {
     return measurements;
 }
 uint16_t measurements_controller_get_lightlevels() { return light_read(); }
+#endif
