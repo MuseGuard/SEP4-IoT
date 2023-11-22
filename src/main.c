@@ -6,7 +6,6 @@
 #include "periodic_task.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 int main() {
   pc_comm_init(9600, NULL);

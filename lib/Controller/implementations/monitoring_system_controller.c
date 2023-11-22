@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST
 #include "connection_controller.h"
 #include "measurements_controller.h"
 #include "monitoring_system_control.h"
@@ -18,3 +19,4 @@ void monitoring_system_controller_execute() {
   pc_comm_send_string_blocking(package.data);
   connection_controller_transmit(package);
 };
+#endif

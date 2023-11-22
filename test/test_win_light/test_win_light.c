@@ -19,6 +19,8 @@ uint8_t DDRK;
 
 DEFINE_FFF_GLOBALS
 
+#define TEST_WIFI_WIN
+
 void setUp(void)
 {
   
