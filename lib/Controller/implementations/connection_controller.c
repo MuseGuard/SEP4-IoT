@@ -41,7 +41,11 @@ bool connection_controller_init(void) {
 
   return result;
 }
+
 bool connection_controller_transmit(Package package) {
+  char string[30];
+  sprintf(string, "Sending: %s = %d\n", package.data, package.size);
+  pc_comm_send_string_blocking(string);
   wifi_command_TCP_transmit((uint8_t *)package.data, package.size);
   return true;
 }

@@ -1,5 +1,4 @@
 #include "connection_controller.h"
-#include "measurements_controller.h"
 #include "monitoring_system_control.h"
 #include "package_builder.h"
 #include "pc_comm.h"
@@ -12,7 +11,7 @@
 int main() {
   _delay_ms(3000);
   pc_comm_init(9600, NULL);
-  measurements_controller_init();
+  monitoring_system_controller_init();
   connection_controller_init();
 
   timer_init_a(monitoring_system_controller_execute, 5000);
