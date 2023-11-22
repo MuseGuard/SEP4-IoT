@@ -6,6 +6,17 @@
 #include <stdio.h>
 #include <string.h>
 
+static char buffer[10];
+
+void connection_controller_callbackFunc() {
+  pc_comm_send_string_blocking(buffer);
+  if (strcmp(buffer, "hello") == 0) {
+    pc_comm_send_string_blocking("Hello from server!\n");
+  } else if (strcmp(buffer, "ping") == 0) {
+    pc_comm_send_string_blocking("Pong!\n");
+  }
+}
+
 bool connection_controller_init(void) {
   _delay_ms(3000);
   bool result = false;
@@ -22,8 +33,8 @@ bool connection_controller_init(void) {
   if (connect_to_AP == WIFI_OK) {
 
     pc_comm_send_string_blocking("Connected to AP!\n");
-    WIFI_ERROR_MESSAGE_t connect_to_server =
-        wifi_command_create_TCP_connection("192.168.214.218", 23, NULL, NULL);
+    WIFI_ERROR_MESSAGE_t connect_to_server = wifi_command_create_TCP_connection(
+        "192.168.214.218", 23, connection_controller_callbackFunc, buffer);
     // wifi_command_create_TCP_connection("172.20.10.3", 23, NULL, NULL);
     if (connect_to_server == WIFI_OK) {
       pc_comm_send_string_blocking("Connected to server!\n");
