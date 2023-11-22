@@ -21,6 +21,8 @@ bool connection_controller_init(void) {
   //WIFI_ERROR_MESSAGE_t connect_to_AP = wifi_command_join_AP("Xr", "12345678");
 
   if (connect_to_AP == WIFI_OK) {
+
+
     pc_comm_send_string_blocking("Connected to AP!\n");
     WIFI_ERROR_MESSAGE_t connect_to_server =
         wifi_command_create_TCP_connection("192.168.214.218", 23, NULL,
@@ -41,6 +43,7 @@ bool connection_controller_init(void) {
 
   return result;
 }
+
 bool connection_controller_transmit(Package package) {
   wifi_command_TCP_transmit((uint8_t *)package.data, package.size);
   return true;
