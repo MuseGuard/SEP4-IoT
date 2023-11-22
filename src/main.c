@@ -1,18 +1,19 @@
-#include "buttons.h"
-#include "buttons_control.h"
-#include "display.h"
-#include "display_control.h"
+#include "connection_controller.h"
+#include "monitoring_system_control.h"
+#include "package_builder.h"
 #include "pc_comm.h"
-#include "security_system_control.h"
+#include "periodic_task.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc, char const *argv[]) {
-  display_init();
-  buttons_init();
+int main() {
   pc_comm_init(9600, NULL);
-  security_system_control_unlock();
-  pc_comm_send_string_blocking("Hello world\n");
-  /* code */
+  monitoring_system_controller_init();
+  connection_controller_init();
+
+  timer_init_a(monitoring_system_controller_execute, 5000);
+  while (1) {
+  }
+
   return 0;
 }

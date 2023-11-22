@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 void cli(void);
-void sei(void );
+void sei(void);
 #define PB7 7
 #define F_CPU 16000000L
 #define TXEN0 3

@@ -26,4 +26,3 @@ uint8_t buttons_2_pressed(){
 uint8_t buttons_3_pressed(){
     return !(B_PIN & (1 << B_3));
 }
-
