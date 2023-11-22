@@ -27,8 +27,15 @@ uint8_t *buttons_control_pin_code_input() {
       _delay_ms(200);
     } else if (buttons_3_pressed()) { // Next number / submit
       current_position++;
+      display_controller_show_pin_code_position(pin_code, current_position);
       _delay_ms(200);
     } 
+    else if (buttons_2_pressed()) { // Previous number
+      if (current_position != 0) {
+        current_position--;
+        display_controller_show_pin_code_position(pin_code, current_position);
+        _delay_ms(200);
+      }
     }
   }
 
