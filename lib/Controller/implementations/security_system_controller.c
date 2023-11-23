@@ -5,7 +5,9 @@
 #include "display.h"
 #include "display_controller.h"
 #include "pc_comm.h"
+#include "pir.h"
 #include "util/delay.h"
+#include "wifi.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,17 +32,22 @@ bool check_pin_code(uint8_t *expected_code, uint8_t *input_code) {
 
 void security_system_control_unlock() {
 
-  uint8_t pin_code[4] = {1, 2, 3, 4}; 
+  uint8_t pin_code[4] = {1, 2, 3, 4};
   uint8_t *input = buttons_control_pin_code_input();
   bool areEqual = check_pin_code((uint8_t *)pin_code, input);
-  
+
   if (areEqual) {
+    wifi_command_TCP_transmit((uint8_t *)"Unlocked\n", 10);
+
     pc_comm_send_string_blocking("Unlocked\n");
     display_controller_write_word("Unlocked");
     _delay_ms(2000);
   } else {
+    wifi_command_TCP_transmit((uint8_t *)"Err\n", 5);
     pc_comm_send_string_blocking("Err\n");
     display_controller_write_word("Err");
+    free(input);
+    security_system_control_unlock();
     _delay_ms(2000);
   }
 
