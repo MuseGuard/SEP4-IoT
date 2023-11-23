@@ -22,7 +22,7 @@ int main() {
   connection_controller_init();
   monitoring_system_controller_init();
 
-  timer_init_a(monitoring_system_controller_execute, 2000);
+  timer_init_a(monitoring_system_controller_execute, 5000);
   security_system_control_unlock();
   while (1) {
     /* code */

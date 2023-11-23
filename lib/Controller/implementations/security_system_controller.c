@@ -2,16 +2,43 @@
 #include "security_system_controller.h"
 #include "buttons.h"
 #include "buttons_controller.h"
+#include "buzzer.h"
 #include "display.h"
 #include "display_controller.h"
 #include "pc_comm.h"
 #include "pir.h"
+#include "tone.h"
 #include "util/delay.h"
 #include "wifi.h"
+#include <avr/interrupt.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+void security_system_send_notification() {
+  sei();
+  wifi_command_TCP_transmit((uint8_t *)"Motion detected\n", 17);
+  tone_play(1000, 500);
+  // pc_comm_send_string_blocking("Motion Detected\n");
+  // display_controller_write_word("AAAA");
+  cli();
+}
+
+void security_system_control_init() {
+  int i = 10;
+  
+  while (i != 0) {
+    display_int(i);
+    _delay_ms(1000);
+    i--;
+  }
+
+  wifi_command_TCP_transmit((uint8_t *)"PIR Activated\n", 15);
+  pc_comm_send_string_blocking("PIR Activated\n");
+  pir_init(security_system_send_notification);
+  tone_init();
+};
 
 bool check_pin_code(uint8_t *expected_code, uint8_t *input_code) {
   bool areEqual = false;
@@ -38,17 +65,17 @@ void security_system_control_unlock() {
 
   if (areEqual) {
     wifi_command_TCP_transmit((uint8_t *)"Unlocked\n", 10);
-
     pc_comm_send_string_blocking("Unlocked\n");
     display_controller_write_word("Unlocked");
-    _delay_ms(2000);
+    security_system_control_init();
+    // _delay_ms(2000);
   } else {
     wifi_command_TCP_transmit((uint8_t *)"Err\n", 5);
     pc_comm_send_string_blocking("Err\n");
     display_controller_write_word("Err");
     free(input);
     security_system_control_unlock();
-    _delay_ms(2000);
+    // _delay_ms(2000);
   }
 
   free(input);
