@@ -25,7 +25,7 @@ void monitoring_system_controller_execute() // Getting data from all sensors and
   light_levels = light_read();
 
   // Give the package a new value
-  Package package = package_builder_build(
+  Package package = package_builder_build_monitor(
       temperature_integer, temperature_decimal, humidity_integer, light_levels);
   connection_controller_transmit(package);
   pc_comm_send_string_blocking(package.data);

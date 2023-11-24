@@ -23,7 +23,7 @@ int main() {
   monitoring_system_controller_init();
 
   timer_init_a(monitoring_system_controller_execute, 5000);
-  security_system_control_unlock();
+  security_system_control_evaluate();
   while (1) {
     /* code */
   }
