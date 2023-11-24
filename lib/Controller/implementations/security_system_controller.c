@@ -1,13 +1,14 @@
-#ifndef WINDOWS_TEST
+// #ifndef WINDOWS_TEST
 #include "security_system_controller.h"
 #include "buttons.h"
 #include "buttons_controller.h"
 #include "buzzer.h"
+#include "connection_controller.h"
 #include "display.h"
 #include "display_controller.h"
+#include "package_builder.h"
 #include "pc_comm.h"
 #include "pir.h"
-#include "tone.h"
 #include "util/delay.h"
 #include "wifi.h"
 #include <avr/interrupt.h>
@@ -16,28 +17,33 @@
 #include <stdlib.h>
 #include <string.h>
 
+static uint8_t pin_code[4] = {1, 2, 3, 4};
+static bool status = false;
+
 void security_system_send_notification() {
-  sei();
-  wifi_command_TCP_transmit((uint8_t *)"Motion detected\n", 17);
-  tone_play(1000, 500);
-  // pc_comm_send_string_blocking("Motion Detected\n");
-  // display_controller_write_word("AAAA");
-  cli();
+  if (status) {
+    sei();
+    buzzer_beep();
+    Package package = package_builder_build_motion_detected();
+    connection_controller_transmit(package);
+    cli();
+  }
 }
 
-void security_system_control_init() {
+void security_system_control_activate() {
   int i = 10;
-  
+
   while (i != 0) {
     display_int(i);
     _delay_ms(1000);
     i--;
   }
 
-  wifi_command_TCP_transmit((uint8_t *)"PIR Activated\n", 15);
-  pc_comm_send_string_blocking("PIR Activated\n");
   pir_init(security_system_send_notification);
-  tone_init();
+
+  Package package = package_builder_build_acknowledgement("PIR Activated");
+  connection_controller_transmit(package);
+  pc_comm_send_string_blocking("PIR Activated\n");
 };
 
 bool check_pin_code(uint8_t *expected_code, uint8_t *input_code) {
@@ -57,28 +63,46 @@ bool check_pin_code(uint8_t *expected_code, uint8_t *input_code) {
   return areEqual;
 }
 
-void security_system_control_unlock() {
+void security_system_control_remote_toggle() {
+  status = !status; // toggle the status
+  if (status) {
+    wifi_command_TCP_transmit((uint8_t *)"Unlocked\n", 10);
+    pc_comm_send_string_blocking("Unlocked\n");
+    security_system_control_activate();
+  } else {
+    wifi_command_TCP_transmit((uint8_t *)"Locked\n", 8);
+    pc_comm_send_string_blocking("Locked\n");
+    Package package = package_builder_build_acknowledgement("PIR Deactivated");
+    connection_controller_transmit(package);
+  }
+}
 
-  uint8_t pin_code[4] = {1, 2, 3, 4};
+void security_system_control_evaluate() {
+
   uint8_t *input = buttons_control_pin_code_input();
   bool areEqual = check_pin_code((uint8_t *)pin_code, input);
 
   if (areEqual) {
-    wifi_command_TCP_transmit((uint8_t *)"Unlocked\n", 10);
-    pc_comm_send_string_blocking("Unlocked\n");
-    display_controller_write_word("Unlocked");
-    security_system_control_init();
-    // _delay_ms(2000);
+    status = !status; // toggle the status
+    if (status) {
+      wifi_command_TCP_transmit((uint8_t *)"Unlocked\n", 10);
+      pc_comm_send_string_blocking("Unlocked\n");
+      security_system_control_activate();
+    } else {
+      wifi_command_TCP_transmit((uint8_t *)"Locked\n", 8);
+      pc_comm_send_string_blocking("Locked\n");
+      Package package =
+          package_builder_build_acknowledgement("PIR Deactivated");
+      connection_controller_transmit(package);
+    }
   } else {
     wifi_command_TCP_transmit((uint8_t *)"Err\n", 5);
     pc_comm_send_string_blocking("Err\n");
     display_controller_write_word("Err");
-    free(input);
-    security_system_control_unlock();
-    // _delay_ms(2000);
   }
 
   free(input);
+  security_system_control_evaluate();
 }
 
-#endif
+// #endif

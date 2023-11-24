@@ -11,7 +11,10 @@ static char buffer[15];
 
 void connection_controller_callbackFunc() {
   pc_comm_send_string_blocking(buffer);
-  if (strcmp(buffer, "hello") == 0) {
+  if (strcmp(buffer, "2iotplease") == 0) {
+    security_system_control_remote_toggle();
+    connection_controller_transmit((Package){.data = "4SecurityStatusChanged", .size = sizeof("4SecurityStatusChanged")});
+  } else if (strcmp(buffer, "hello") == 0) {
     pc_comm_send_string_blocking("Hello from server!\n");
   } else if (strcmp(buffer, "ping") == 0) {
     pc_comm_send_string_blocking("Pong!\n");
