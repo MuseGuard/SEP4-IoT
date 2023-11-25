@@ -5,14 +5,53 @@
 #include "periodic_task.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "servo.h"
+#include <avr/delay.h>
+#include "hc_sr04.h"
+
+void loop() {
+  char buffer[8];
+    // Rotate the servo motor from 15 to 165 degrees
+    for (int i = 15; i <= 165; i++) {
+        // Move the servo to the current degree
+        servo(i);
+        // _delay_ms(30);
+
+        //Take a measurement with the sensor
+        uint16_t distance = hc_sr04_takeMeasurement();
+        sprintf(buffer, "%d,%d.\n", i, distance);
+        pc_comm_send_string_blocking(buffer);
+
+        // // Print the result
+        // printf("%d,%d.", i, distance);
+    }
+
+    // Repeat the previous lines from 165 to 15 degrees
+    for (int i = 165; i > 15; i--) {
+        // Move the servo to the current degree
+        servo(i);
+        // _delay_ms(30);
+
+        // // Take a measurement with the sensor
+        uint16_t distance = hc_sr04_takeMeasurement();
+        sprintf(buffer, "%d,%d.\n", i, distance);
+        pc_comm_send_string_blocking(buffer);
+
+        // // Print the result
+        // printf("%d,%d.", i, distance);
+    }
+}
 
 int main() {
   pc_comm_init(9600, NULL);
-  monitoring_system_controller_init();
-  connection_controller_init();
+  hc_sr04_init();
 
-  timer_init_a(monitoring_system_controller_execute, 5000);
+  // monitoring_system_controller_init();
+  // connection_controller_init();
+
+  // timer_init_a(monitoring_system_controller_execute, 5000);
   while (1) {
+    loop();
   }
 
   return 0;
