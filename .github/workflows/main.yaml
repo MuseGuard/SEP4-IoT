@@ -23,20 +23,23 @@ jobs:
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
 
-      - name: Run WIFI Test
+      - name: Run WIFI Test.
         run: pio test -e win_test_wifi -f "test_win_wifi"  
         
-      - name: Run pc_comm Test
+      - name: Run pc_comm Test.
         run: pio test -e win_test_pc_comm -f "test_win_pc_comm"  
 
-      - name: run Light Test
+      - name: Run Light Test.
         run: pio test -e win_test_light -f "test_win_light"
 
-      - name: Run Connection Controller Test
+      - name: Run Connection Controller Test.
         run: pio test -e win_test_connection_controller -f "test_connection_controller"
 
-      - name: Run Monitoring Controller Test
+      - name: Run Monitoring Controller Test.
         run: pio test -e win_test_monitoring_controller -f "test_monitoring_controller" 
 
-      - name: Run Security Controller Test
+      - name: Run Security Controller Test.
         run: pio test -e win_test_security_controller -f "test_security_controller"      
+
+      - name: Build The Project.
+        run: pio run -e your_build_environment
