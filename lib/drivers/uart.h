@@ -79,4 +79,3 @@ void uart_send_string_blocking(USART_t usart, char *data);
  * @return UART_Callback_t The callback function currently in use.
  */
 UART_Callback_t uart_get_rx_callback(USART_t usart);
-
