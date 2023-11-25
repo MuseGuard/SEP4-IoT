@@ -6,6 +6,7 @@
 #include "connection_controller.h"
 #include "light.h"
 
+#define TEST_MONITORING_CONTROLLER
 // Define FFF globals and mock functions
 DEFINE_FFF_GLOBALS;
 

@@ -6,6 +6,8 @@
 #include "wifi.h"
 
 
+#define TEST_SECURITY_CONTROLLER
+
 
 // Define FFF globals and mock functions
 DEFINE_FFF_GLOBALS;
@@ -23,7 +25,6 @@ FAKE_VOID_FUNC(pc_comm_send_string_blocking, char*);
 FAKE_VALUE_FUNC(uint8_t*, buttons_control_pin_code_input);
 
 void setUp(void) {
-    // Reset fake functions before each test
     FFF_RESET_HISTORY();
     RESET_FAKE(buzzer_beep);
     RESET_FAKE(display_int);
@@ -44,6 +45,7 @@ void test_pir_init(void) {
 }
 
 int main(void) {
+    UNITY_BEGIN();
 
     RUN_TEST(test_pir_init);
 
