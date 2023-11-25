@@ -39,4 +39,4 @@ jobs:
         run: pio test -e win_test_monitoring_controller -f "test_monitoring_controller" 
 
       - name: Run Security Controller Test
-        run: pio test -e win_test_security_controller -f "test_security_controller""      
+        run: pio test -e win_test_security_controller -f "test_security_controller"      
