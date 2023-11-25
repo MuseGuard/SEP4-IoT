@@ -96,13 +96,8 @@ void security_system_controller_toggle_status() {
   }
 }
 
-void securiy_system_controller_change_pin_code(char *new_pin_string) {
-  uint8_t new_code[4];
-  for (int i = 0; i < 4; i++) {
-    new_code[i] = new_pin_string[i] - '0'; // convert char to int (ASCII)
-  }
-
-  memcpy(pin_code, new_code, 4);
+void securiy_system_controller_change_pin_code(uint8_t *new_pin) {
+  memcpy(pin_code, new_pin, 4);
   char str[20];
   sprintf(str, "New pin code: %d%d%d%d\n", pin_code[0], pin_code[1],
           pin_code[2], pin_code[3]);

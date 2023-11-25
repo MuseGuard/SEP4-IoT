@@ -9,4 +9,4 @@ void security_system_controller_activate();
 void security_system_controller_evaluate();
 void security_system_controller_toggle_status();
 void security_system_controller_send_notification();
-void securiy_system_controller_change_pin_code(char *new_pin_string);
+void securiy_system_controller_change_pin_code(uint8_t *new_pin);

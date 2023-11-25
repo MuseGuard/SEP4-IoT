@@ -1,6 +1,7 @@
 #include "connection_controller.h"
 #include "includes.h"
 #include "pc_comm.h"
+#include "request_interpreter.h"
 #include "security_system_controller.h"
 #include "wifi.h"
 #include <stdbool.h>
@@ -19,17 +20,9 @@ void connection_controller_callbackFunc() {
                   .size = sizeof("4SecurityStatusChanged")});
   } else if (strstr(buffer, "ChangePIN") == buffer) {
     // buffer contains or begins with "ChangePIN"
-    // Split buffer by '='
-    char * equal_sign = strchr(buffer, '=');
-    char * pin_code = equal_sign + 1;
-    if (pin_code != NULL) {
-      securiy_system_controller_change_pin_code(pin_code);
-    } else {
-      Package package =
-          package_builder_build_acknowledgement("PIN code not changed");
-      connection_controller_transmit(package);
-    }
-
+    uint8_t *pin_code = request_interpreter_get_pin(buffer);
+    securiy_system_controller_change_pin_code(pin_code);
+    
   } else if (strcmp(buffer, "hello") == 0) {
     pc_comm_send_string_blocking("Hello from server!\n");
   } else if (strcmp(buffer, "ping") == 0) {
@@ -46,18 +39,18 @@ bool connection_controller_init(void) {
   wifi_init();
 
   // Connecting to Rado's phone
-/*   WIFI_ERROR_MESSAGE_t connect_to_AP =
-      wifi_command_join_AP("madinnit", "12345678"); */
+  /*   WIFI_ERROR_MESSAGE_t connect_to_AP =
+        wifi_command_join_AP("madinnit", "12345678"); */
 
   // Connecting to Bozhidar's phone
-  WIFI_ERROR_MESSAGE_t connect_to_AP = wifi_command_join_AP("Xr",
-  "12345678");
+  WIFI_ERROR_MESSAGE_t connect_to_AP = wifi_command_join_AP("Xr", "12345678");
 
   if (connect_to_AP == WIFI_OK) {
 
     pc_comm_send_string_blocking("Connected to AP!\n");
-/*     WIFI_ERROR_MESSAGE_t connect_to_server = wifi_command_create_TCP_connection(
-        "192.168.214.98", 23, connection_controller_callbackFunc, buffer); */
+    /*     WIFI_ERROR_MESSAGE_t connect_to_server =
+       wifi_command_create_TCP_connection( "192.168.214.98", 23,
+       connection_controller_callbackFunc, buffer); */
     WIFI_ERROR_MESSAGE_t connect_to_server = wifi_command_create_TCP_connection(
         "172.20.10.2", 23, connection_controller_callbackFunc, buffer);
     // wifi_command_create_TCP_connection("172.20.10.3", 23, NULL, NULL);
