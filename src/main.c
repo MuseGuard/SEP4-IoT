@@ -18,14 +18,17 @@ int main() {
   display_init();
   buttons_init();
   pc_comm_init(9600, NULL);
-
   connection_controller_init();
+
+  /* connection_controller_init();
   monitoring_system_controller_init();
 
   timer_init_a(monitoring_system_controller_execute, 5000);
-  security_system_control_evaluate();
-  while (1) {
-    /* code */
+  security_system_controller_evaluate(); */
+
+  /* uint8_t pin_code[4] = {5, 6, 7, 8};
+  securiy_system_controller_change_pin_code((uint8_t *)&pin_code); */
+  while (1) { /* code */
   }
   return 0;
 }
