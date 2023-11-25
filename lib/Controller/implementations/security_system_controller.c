@@ -20,6 +20,7 @@
 static uint8_t pin_code[4] = {1, 2, 3, 4};
 static bool status = false;
 
+// Send notification to the server when motion is detected
 void security_system_send_notification() {
   if (status) {
     sei();
@@ -46,7 +47,8 @@ void security_system_control_activate() {
   pc_comm_send_string_blocking("PIR Activated\n");
 };
 
-bool check_pin_code(uint8_t *expected_code, uint8_t *input_code) {
+bool security_system_check_pin_code(uint8_t *expected_code,
+                                    uint8_t *input_code) {
   bool areEqual = false;
   for (int i = 0; i < 4; i++) {
     char str[20];
@@ -63,7 +65,24 @@ bool check_pin_code(uint8_t *expected_code, uint8_t *input_code) {
   return areEqual;
 }
 
-void security_system_control_remote_toggle() {
+void security_system_control_evaluate() {
+
+  uint8_t *input = buttons_control_pin_code_input();
+  bool areEqual = security_system_check_pin_code((uint8_t *)pin_code, input);
+
+  if (areEqual) {
+    security_system_control_toggle_status();
+  } else {
+    wifi_command_TCP_transmit((uint8_t *)"Err\n", 5);
+    pc_comm_send_string_blocking("Err\n");
+    display_controller_write_word("Err");
+  }
+
+  free(input);
+  security_system_control_evaluate();
+}
+
+void security_system_control_toggle_status() {
   status = !status; // toggle the status
   if (status) {
     wifi_command_TCP_transmit((uint8_t *)"Unlocked\n", 10);
@@ -76,33 +95,4 @@ void security_system_control_remote_toggle() {
     connection_controller_transmit(package);
   }
 }
-
-void security_system_control_evaluate() {
-
-  uint8_t *input = buttons_control_pin_code_input();
-  bool areEqual = check_pin_code((uint8_t *)pin_code, input);
-
-  if (areEqual) {
-    status = !status; // toggle the status
-    if (status) {
-      wifi_command_TCP_transmit((uint8_t *)"Unlocked\n", 10);
-      pc_comm_send_string_blocking("Unlocked\n");
-      security_system_control_activate();
-    } else {
-      wifi_command_TCP_transmit((uint8_t *)"Locked\n", 8);
-      pc_comm_send_string_blocking("Locked\n");
-      Package package =
-          package_builder_build_acknowledgement("PIR Deactivated");
-      connection_controller_transmit(package);
-    }
-  } else {
-    wifi_command_TCP_transmit((uint8_t *)"Err\n", 5);
-    pc_comm_send_string_blocking("Err\n");
-    display_controller_write_word("Err");
-  }
-
-  free(input);
-  security_system_control_evaluate();
-}
-
 // #endif
