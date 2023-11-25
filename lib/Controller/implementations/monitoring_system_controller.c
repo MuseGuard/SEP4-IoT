@@ -4,8 +4,8 @@
 #include "monitoring_system_control.h"
 #include "package_builder.h"
 #include "pc_comm.h"
-#include <avr/interrupt.h>
 #include <stdlib.h>
+#include "includes.h"
 
 static uint8_t temperature_integer, temperature_decimal, humidity_integer,
     humidity_decimal;         // Static variables for Temperature Data

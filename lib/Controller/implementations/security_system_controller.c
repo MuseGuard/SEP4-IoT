@@ -9,13 +9,12 @@
 #include "package_builder.h"
 #include "pc_comm.h"
 #include "pir.h"
-#include "util/delay.h"
 #include "wifi.h"
-#include <avr/interrupt.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "includes.h"
 
 static uint8_t pin_code[4] = {1, 2, 3, 4};
 static bool status = false;

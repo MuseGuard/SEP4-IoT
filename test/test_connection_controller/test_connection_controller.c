@@ -3,11 +3,25 @@
 #include "connection_controller.h"
 #include "wifi.h"
 #include "pc_comm.h"
+#include "pir.h"
+#include "buttons.h"
+#include "buzzer.h"
+#include "display.h"
 DEFINE_FFF_GLOBALS
 
 #define TEST_CONNECTION_CONTROLLER
 
 
+FAKE_VOID_FUNC(cli);
+FAKE_VOID_FUNC(sei);
+FAKE_VOID_FUNC(buzzer_beep);
+FAKE_VOID_FUNC(display_init);
+FAKE_VOID_FUNC(display_setValues, uint8_t, uint8_t, uint8_t, uint8_t);
+FAKE_VOID_FUNC(display_int, int16_t);
+FAKE_VALUE_FUNC(uint8_t, buttons_1_pressed);
+FAKE_VALUE_FUNC(uint8_t, buttons_2_pressed);
+FAKE_VALUE_FUNC(uint8_t, buttons_3_pressed);
+FAKE_VOID_FUNC(pir_init, pir_callback_t);
 FAKE_VOID_FUNC(wifi_init);
 FAKE_VOID_FUNC(_delay_ms, int);
 FAKE_VALUE_FUNC(WIFI_ERROR_MESSAGE_t, wifi_command_join_AP, char*, char*);

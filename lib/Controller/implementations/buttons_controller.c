@@ -1,6 +1,4 @@
-#ifndef WINDOWS_TEST
 #include "buttons_controller.h"
-#include "buttons.h"
 #include "display.h"
 #include "display_controller.h"
 #include "pc_comm.h"
@@ -8,7 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <util/delay.h>
+#include "buttons.h"
+#include "includes.h"
 
 uint8_t *buttons_control_pin_code_input() {
   uint8_t *pin_code =
@@ -47,5 +46,3 @@ uint8_t *buttons_control_pin_code_input() {
 
   return pin_code;
 }
-
-#endif

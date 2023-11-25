@@ -1,4 +1,3 @@
-#ifndef WINDOWS_TEST
 #include "display.h"
 #include "display_controller.h"
 #include "pc_comm.h"
@@ -7,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <util/delay.h>
+#include "includes.h"
 
 void display_controller_write_word(char *word) {
   uint8_t *nums = display_controller_convert_word_to_numbers(word);
@@ -96,4 +95,3 @@ void display_controller_show_pin_code_position(uint8_t *pin_code,
   }
   _delay_ms(1);
 }
-#endif
