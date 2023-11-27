@@ -22,7 +22,8 @@ void connection_controller_callbackFunc() {
     // buffer contains or begins with "ChangePIN"
     uint8_t *pin_code = request_interpreter_get_pin(buffer);
     securiy_system_controller_change_pin_code(pin_code);
-    
+    free(pin_code);
+
   } else if (strcmp(buffer, "hello") == 0) {
     pc_comm_send_string_blocking("Hello from server!\n");
   } else if (strcmp(buffer, "ping") == 0) {

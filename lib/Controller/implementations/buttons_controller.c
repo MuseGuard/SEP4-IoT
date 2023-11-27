@@ -1,13 +1,14 @@
 #include "buttons_controller.h"
+#include "buttons.h"
 #include "display.h"
 #include "display_controller.h"
+#include "includes.h"
 #include "pc_comm.h"
+#include "security_system_controller.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "buttons.h"
-#include "includes.h"
 
 uint8_t *buttons_control_pin_code_input() {
   uint8_t *pin_code =
@@ -28,8 +29,7 @@ uint8_t *buttons_control_pin_code_input() {
       current_position++;
       display_controller_show_pin_code_position(pin_code, current_position);
       _delay_ms(200);
-    } 
-    else if (buttons_2_pressed()) { // Previous number
+    } else if (buttons_2_pressed()) { // Previous number
       if (current_position != 0) {
         current_position--;
         display_controller_show_pin_code_position(pin_code, current_position);
@@ -45,4 +45,17 @@ uint8_t *buttons_control_pin_code_input() {
   pc_comm_send_string_blocking(message);
 
   return pin_code;
+}
+
+void buttons_control_listen() {
+  if (buttons_1_pressed()) {
+    // LOCK / UNLOCK
+    pc_comm_send_string_blocking("Buttons control: 1\n");
+    security_system_controller_evaluate();
+  } else if (buttons_2_pressed()) {
+    pc_comm_send_string_blocking("Buttons control: 2\n");
+  } else if (buttons_3_pressed()) {
+    pc_comm_send_string_blocking("Buttons control: 3\n");
+    security_system_controller_override_pin_code();
+  }
 }

@@ -18,11 +18,13 @@ void display_controller_write_word(char *word) {
     uint8_t *temp = malloc(4 * sizeof(uint8_t));
     for (uint8_t i = 0; i < 4; i++) {
       if (i < nums_len) {
+
         temp[i] = nums[i];
       } else {
         temp[i] = 37;
       }
     }
+    free(nums);
     nums = temp;
     nums_len = 4;
   }
