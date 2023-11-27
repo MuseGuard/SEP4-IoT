@@ -23,14 +23,8 @@ void connection_controller_callbackFunc() {
     uint8_t *pin_code = request_interpreter_get_pin(buffer);
     securiy_system_controller_change_pin_code(pin_code);
     free(pin_code);
-
-  } else if (strcmp(buffer, "hello") == 0) {
-    pc_comm_send_string_blocking("Hello from server!\n");
-  } else if (strcmp(buffer, "ping") == 0) {
-    pc_comm_send_string_blocking("Pong!\n");
   } else {
-    pc_comm_send_string_blocking(buffer);
-    pc_comm_send_string_blocking("\n");
+    connection_controller_send_message("Invalid command!");
   }
 }
 
@@ -39,22 +33,16 @@ bool connection_controller_init(void) {
   bool result = false;
   wifi_init();
 
-  // Connecting to Rado's phone
-  /*   WIFI_ERROR_MESSAGE_t connect_to_AP =
-        wifi_command_join_AP("madinnit", "12345678"); */
-
-  // Connecting to Bozhidar's phone
-  WIFI_ERROR_MESSAGE_t connect_to_AP = wifi_command_join_AP("Xr", "12345678");
+  WIFI_ERROR_MESSAGE_t connect_to_AP =
+      wifi_command_join_AP("madinnit", "12345678");
 
   if (connect_to_AP == WIFI_OK) {
 
     pc_comm_send_string_blocking("Connected to AP!\n");
-    /*     WIFI_ERROR_MESSAGE_t connect_to_server =
-       wifi_command_create_TCP_connection( "192.168.214.98", 23,
-       connection_controller_callbackFunc, buffer); */
+
     WIFI_ERROR_MESSAGE_t connect_to_server = wifi_command_create_TCP_connection(
-        "172.20.10.2", 23, connection_controller_callbackFunc, buffer);
-    // wifi_command_create_TCP_connection("172.20.10.3", 23, NULL, NULL);
+        "192.168.214.218", 23, connection_controller_callbackFunc, buffer);
+
     if (connect_to_server == WIFI_OK) {
       pc_comm_send_string_blocking("Connected to server!\n");
       result = true;
@@ -72,6 +60,15 @@ bool connection_controller_init(void) {
 }
 
 bool connection_controller_transmit(Package package) {
-  wifi_command_TCP_transmit((uint8_t *)package.data, package.size);
-  return true;
+  WIFI_ERROR_MESSAGE_t result =
+      wifi_command_TCP_transmit((uint8_t *)package.data, package.size);
+  bool return_value = result == WIFI_OK ? true : false;
+  return return_value;
+}
+
+bool connection_controller_send_message(char *message) {
+  WIFI_ERROR_MESSAGE_t result =
+      wifi_command_TCP_transmit((uint8_t *)message, strlen(message));
+  bool return_value = result == WIFI_OK ? true : false;
+  return return_value;
 }

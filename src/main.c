@@ -14,16 +14,15 @@
 #include <stdlib.h>
 
 int main() {
-  // _delay_ms(3000);
   display_init();
-  // security_system_controller_evaluate();
   buttons_init();
+
   pc_comm_init(9600, NULL);
 
-  // connection_controller_init();
+  connection_controller_init();
   monitoring_system_controller_init();
 
-  // timer_init_a(monitoring_system_controller_execute, 5000);
+  timer_init_a(monitoring_system_controller_execute, 5000);
   // timer_init_b(buttons_control_listen, 100  );
 
   /* uint8_t pin_code[4] = {5, 6, 7, 8};
