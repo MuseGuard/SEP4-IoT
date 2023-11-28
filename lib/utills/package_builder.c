@@ -24,7 +24,7 @@ Package package_builder_build_monitor(int8_t temperature_integer,
 
 Package package_builder_build_motion_detected() {
   char str[30];
-  sprintf(str, "MOTION DETECTED\n");
+  sprintf(str, "MOTION DETECTED");
 
   strcpy(motionPackage.data, str);
   motionPackage.size = strlen(motionPackage.data);

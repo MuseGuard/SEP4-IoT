@@ -17,19 +17,22 @@
 
 static uint8_t pin_code[4] = {1, 2, 3, 4};
 static bool status = false;
+static bool calibrationPhase = true;
 
 // Send notification to the server when motion is detected
 void security_system_controller_send_notification() {
-  if (status) {
+  if (status && !calibrationPhase) {
     sei();
     buzzer_beep();
     Package package = package_builder_build_motion_detected();
     connection_controller_transmit(package);
+    pc_comm_send_string_blocking("Motion detected\n");
     cli();
   }
 }
 
 void security_system_controller_activate() {
+  pir_init(security_system_controller_send_notification);
   int i = 10;
 
   while (i != 0) {
@@ -37,8 +40,7 @@ void security_system_controller_activate() {
     _delay_ms(1000);
     i--;
   }
-
-  pir_init(security_system_controller_send_notification);
+  calibrationPhase = false;
 
   pc_comm_send_string_blocking("PIR Activated\n");
 };
@@ -72,7 +74,7 @@ void security_system_controller_evaluate() {
   sprintf(str, "Are equal: %d\n", areEqual);
   pc_comm_send_string_blocking(str);
   if (areEqual) {
-    security_system_controller_toggle_status();
+    security_system_controller_toggle_status(false);
   } else {
     pc_comm_send_string_blocking("Err\n");
     display_controller_write_word("Err");
@@ -82,27 +84,22 @@ void security_system_controller_evaluate() {
   }
 
   free(input);
-  pc_comm_send_string_blocking("Security system controller: evaluate\n");
 }
 
-void security_system_controller_toggle_status() {
+void security_system_controller_toggle_status(bool remote) {
   status = !status; // toggle the status
+  connection_controller_send_message(remote ? "SSCRemoteIoT" : "SSCLocal");
+
   if (status) {
-    connection_controller_send_message("Unlocked");
-    pc_comm_send_string_blocking("Unlocked\n");
     security_system_controller_activate();
+    pc_comm_send_string_blocking("Unlocked\n");
   } else {
-    connection_controller_send_message("Locked");
     pc_comm_send_string_blocking("Locked\n");
   }
+  pc_comm_send_string_blocking("Changed\n");
 }
 
 void securiy_system_controller_change_pin_code(uint8_t *new_pin) {
-  pc_comm_send_string_blocking("Entered func\n");
-  if (new_pin == NULL) {
-    pc_comm_send_string_blocking("Entered if\n");
-    return;
-  }
   memcpy(&pin_code, new_pin, 4);
   free(new_pin);
   char str[20];

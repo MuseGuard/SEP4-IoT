@@ -13,11 +13,11 @@ static char buffer[15];
 void connection_controller_callbackFunc() {
   pc_comm_send_string_blocking(buffer);
   pc_comm_send_string_blocking("\n");
-  if (strcmp(buffer, "2iotplease") == 0) {
-    security_system_controller_toggle_status();
-    connection_controller_transmit(
-        (Package){.data = "4SecurityStatusChanged",
-                  .size = sizeof("4SecurityStatusChanged")});
+  if (strcmp(buffer, "ChangeSecurityStatus") == 0) {
+    security_system_controller_toggle_status(true);
+    /* connection_controller_transmit(
+        (Package){.data = "SecurityStatusChanged",
+                  .size = sizeof("4SecurityStatusChanged")}); */
   } else if (strstr(buffer, "ChangePIN") == buffer) {
     // buffer contains or begins with "ChangePIN"
     uint8_t *pin_code = request_interpreter_get_pin(buffer);
@@ -41,7 +41,7 @@ bool connection_controller_init(void) {
     pc_comm_send_string_blocking("Connected to AP!\n");
 
     WIFI_ERROR_MESSAGE_t connect_to_server = wifi_command_create_TCP_connection(
-        "192.168.214.218", 23, connection_controller_callbackFunc, buffer);
+        "192.168.214.98", 23, connection_controller_callbackFunc, buffer);
 
     if (connect_to_server == WIFI_OK) {
       pc_comm_send_string_blocking("Connected to server!\n");
