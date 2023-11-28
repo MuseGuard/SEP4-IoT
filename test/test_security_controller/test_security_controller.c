@@ -18,7 +18,6 @@ FAKE_VOID_FUNC(buzzer_beep);
 FAKE_VOID_FUNC(display_int, int);
 FAKE_VOID_FUNC(pir_init, pir_callback_t);
 FAKE_VALUE_FUNC(Package, package_builder_build_motion_detected);
-FAKE_VALUE_FUNC(Package, package_builder_build_acknowledgement, char*);
 FAKE_VALUE_FUNC(bool, connection_controller_transmit, Package);
 FAKE_VALUE_FUNC(WIFI_ERROR_MESSAGE_t, wifi_command_TCP_transmit, uint8_t*, uint16_t);
 FAKE_VOID_FUNC(pc_comm_send_string_blocking, char*);
@@ -30,7 +29,6 @@ void setUp(void) {
     RESET_FAKE(display_int);
     RESET_FAKE(pir_init);
     RESET_FAKE(package_builder_build_motion_detected);
-    RESET_FAKE(package_builder_build_acknowledgement);
     RESET_FAKE(connection_controller_transmit);
     RESET_FAKE(wifi_command_TCP_transmit);
     RESET_FAKE(pc_comm_send_string_blocking);
