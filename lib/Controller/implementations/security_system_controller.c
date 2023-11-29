@@ -28,7 +28,7 @@ void security_system_controller_send_notification() {
     connection_controller_transmit(package);
     pc_comm_send_string_blocking("Motion detected\n");
     cli();
-  }
+    }
 }
 
 void security_system_controller_activate() {
