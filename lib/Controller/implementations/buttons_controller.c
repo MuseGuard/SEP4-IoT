@@ -1,14 +1,16 @@
-#ifndef WINDOWS_TEST
 #include "buttons_controller.h"
 #include "buttons.h"
+#include "connection_controller.h"
 #include "display.h"
 #include "display_controller.h"
+#include "includes.h"
 #include "pc_comm.h"
+#include "security_system_controller.h"
+#include "wifi.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <util/delay.h>
 
 uint8_t *buttons_control_pin_code_input() {
   uint8_t *pin_code =
@@ -29,8 +31,7 @@ uint8_t *buttons_control_pin_code_input() {
       current_position++;
       display_controller_show_pin_code_position(pin_code, current_position);
       _delay_ms(200);
-    } 
-    else if (buttons_2_pressed()) { // Previous number
+    } else if (buttons_2_pressed()) { // Previous number
       if (current_position != 0) {
         current_position--;
         display_controller_show_pin_code_position(pin_code, current_position);
@@ -48,4 +49,18 @@ uint8_t *buttons_control_pin_code_input() {
   return pin_code;
 }
 
-#endif
+void buttons_control_listen() {
+  if (buttons_1_pressed()) {
+    // LOCK / UNLOCK
+    _delay_ms(200);
+    security_system_controller_evaluate();
+  } else if (buttons_2_pressed()) {
+    // figure something out
+/*     connection_controller_send_message("Closing connection...");
+    wifi_command_quit_AP();
+    display_controller_write_word("Bye"); */
+  } else if (buttons_3_pressed()) {
+    security_system_controller_override_pin_code();
+  }
+  display_setValues(33, 18, 37, 37); // Show "Hi  "
+}

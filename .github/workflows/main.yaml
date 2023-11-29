@@ -2,9 +2,9 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [development]
+    branches: [development*]
   pull_request:
-    branches: [development]
+    branches: [development*]
 
 jobs:
   build:
@@ -22,8 +22,24 @@ jobs:
           python-version: "3.9"
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
-      - name: Run Tests
-        run: pio test -e winTest
-        env:
-          platform: native
-          PLATFORMIO_BUILD_FLAGS: -D WINDOWS_TEST
+
+      - name: Run WIFI Test.
+        run: pio test -e win_test_wifi -f "test_win_wifi"  
+        
+      - name: Run pc_comm Test.
+        run: pio test -e win_test_pc_comm -f "test_win_pc_comm"  
+
+      - name: Run Light Test.
+        run: pio test -e win_test_light -f "test_win_light"
+
+      - name: Run Connection Controller Test.
+        run: pio test -e win_test_connection_controller -f "test_connection_controller"
+
+      - name: Run Monitoring Controller Test.
+        run: pio test -e win_test_monitoring_controller -f "test_monitoring_controller" 
+
+      - name: Run Security Controller Test.
+        run: pio test -e win_test_security_controller -f "test_security_controller"      
+
+      - name: Build The Project.
+        run: pio run -e ATmega2560

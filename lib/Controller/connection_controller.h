@@ -4,4 +4,4 @@
 
 bool connection_controller_init(void);
 bool connection_controller_transmit(Package package);
-void connection_controller_callbackFunc();
+bool connection_controller_send_message(char *message);

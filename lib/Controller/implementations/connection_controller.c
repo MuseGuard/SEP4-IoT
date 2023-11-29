@@ -1,25 +1,30 @@
 #include "connection_controller.h"
 #include "includes.h"
 #include "pc_comm.h"
+#include "request_interpreter.h"
+#include "security_system_controller.h"
 #include "wifi.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include "security_system_controller.h"
 
 static char buffer[15];
 
 void connection_controller_callbackFunc() {
   pc_comm_send_string_blocking(buffer);
-  if (strcmp(buffer, "2iotplease") == 0) {
-    security_system_control_remote_toggle();
-    connection_controller_transmit((Package){.data = "4SecurityStatusChanged", .size = sizeof("4SecurityStatusChanged")});
-  } else if (strcmp(buffer, "hello") == 0) {
-    pc_comm_send_string_blocking("Hello from server!\n");
-  } else if (strcmp(buffer, "ping") == 0) {
-    pc_comm_send_string_blocking("Pong!\n");
+  pc_comm_send_string_blocking("\n");
+  if (strcmp(buffer, "ChangeSecurityStatus") == 0) {
+    security_system_controller_toggle_status(true);
+    /* connection_controller_transmit(
+        (Package){.data = "SecurityStatusChanged",
+                  .size = sizeof("4SecurityStatusChanged")}); */
+  } else if (strstr(buffer, "ChangePIN") == buffer) {
+    // buffer contains or begins with "ChangePIN"
+    uint8_t *pin_code = request_interpreter_get_pin(buffer);
+    securiy_system_controller_change_pin_code(pin_code);
+    free(pin_code);
   } else {
-    pc_comm_send_string_blocking(buffer);
+    connection_controller_send_message("Invalid command!");
   }
 }
 
@@ -28,20 +33,16 @@ bool connection_controller_init(void) {
   bool result = false;
   wifi_init();
 
-  // Connecting to Rado's phone
   WIFI_ERROR_MESSAGE_t connect_to_AP =
       wifi_command_join_AP("madinnit", "12345678");
-
-  // Connecting to Bozhidar's phone
-  // WIFI_ERROR_MESSAGE_t connect_to_AP = wifi_command_join_AP("Xr",
-  // "12345678");
 
   if (connect_to_AP == WIFI_OK) {
 
     pc_comm_send_string_blocking("Connected to AP!\n");
+
     WIFI_ERROR_MESSAGE_t connect_to_server = wifi_command_create_TCP_connection(
         "192.168.214.98", 23, connection_controller_callbackFunc, buffer);
-    // wifi_command_create_TCP_connection("172.20.10.3", 23, NULL, NULL);
+
     if (connect_to_server == WIFI_OK) {
       pc_comm_send_string_blocking("Connected to server!\n");
       result = true;
@@ -59,6 +60,15 @@ bool connection_controller_init(void) {
 }
 
 bool connection_controller_transmit(Package package) {
-  wifi_command_TCP_transmit((uint8_t *)package.data, package.size);
-  return true;
+  WIFI_ERROR_MESSAGE_t result =
+      wifi_command_TCP_transmit((uint8_t *)package.data, package.size);
+  bool return_value = result == WIFI_OK ? true : false;
+  return return_value;
+}
+
+bool connection_controller_send_message(char *message) {
+  WIFI_ERROR_MESSAGE_t result =
+      wifi_command_TCP_transmit((uint8_t *)message, strlen(message));
+  bool return_value = result == WIFI_OK ? true : false;
+  return return_value;
 }

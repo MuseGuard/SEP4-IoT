@@ -14,18 +14,22 @@
 #include <stdlib.h>
 
 int main() {
-  _delay_ms(3000);
   display_init();
   buttons_init();
+
   pc_comm_init(9600, NULL);
 
   connection_controller_init();
   monitoring_system_controller_init();
 
   timer_init_a(monitoring_system_controller_execute, 5000);
-  security_system_control_evaluate();
+  // timer_init_b(buttons_control_listen, 100  );
+
+  /* uint8_t pin_code[4] = {5, 6, 7, 8};
+  securiy_system_controller_change_pin_code((uint8_t *)&pin_code); */
   while (1) {
-    /* code */
+    buttons_control_listen();
+    _delay_ms(100);
   }
   return 0;
 }
