@@ -1,38 +1,33 @@
 // #ifndef WINDOWS_TEST
-#include "security_system_controller.h"
-#include "buttons_controller.h"
-#include "buzzer.h"
-#include "connection_controller.h"
-#include "display.h"
-#include "display_controller.h"
+#include "security_system_control.h"
 #include "includes.h"
+
+#include "buttons_control.h"
+#include "buzzer.h"
+#include "connection_control.h"
+#include "display.h"
+#include "display_control.h"
 #include "package_builder.h"
-#include "pc_comm.h"
 #include "pir.h"
-#include "wifi.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 static uint8_t pin_code[4] = {1, 2, 3, 4};
 static bool status = false;
-static bool calibrationPhase = true;
+static bool is_pir_calibrating = true;
 
 // Send notification to the server when motion is detected
-void security_system_controller_send_notification() {
-  if (status && !calibrationPhase) {
+void security_system_control_send_notification() {
+  if (status && !is_pir_calibrating) {
     sei();
     buzzer_beep();
     Package package = package_builder_build_motion_detected();
-    connection_controller_transmit(package);
+    connection_control_transmit(package);
     pc_comm_send_string_blocking("Motion detected\n");
     cli();
     }
 }
 
-void security_system_controller_activate() {
-  pir_init(security_system_controller_send_notification);
+void security_system_control_activate() {
+  pir_init(security_system_control_send_notification);
   int i = 10;
 
   while (i != 0) {
@@ -40,12 +35,12 @@ void security_system_controller_activate() {
     _delay_ms(1000);
     i--;
   }
-  calibrationPhase = false;
+  is_pir_calibrating = false;
 
   pc_comm_send_string_blocking("PIR Activated\n");
 };
 
-bool security_system_controller_check_pin_code(uint8_t *input_code) {
+bool security_system_control_check_pin_code(uint8_t *input_code) {
   bool areEqual = false;
   char str[20];
   sprintf(str, "Expected %d%d%d%d\n", pin_code[0], pin_code[1], pin_code[2],
@@ -66,32 +61,32 @@ bool security_system_controller_check_pin_code(uint8_t *input_code) {
   return areEqual;
 }
 
-void security_system_controller_evaluate() {
+void security_system_control_evaluate() {
 
   uint8_t *input = buttons_control_pin_code_input();
-  bool areEqual = security_system_controller_check_pin_code(input);
+  bool areEqual = security_system_control_check_pin_code(input);
   char str[20];
   sprintf(str, "Are equal: %d\n", areEqual);
   pc_comm_send_string_blocking(str);
   if (areEqual) {
-    security_system_controller_toggle_status(false);
+    security_system_control_toggle_status(false);
   } else {
     pc_comm_send_string_blocking("Err\n");
-    display_controller_write_word("Err");
-    connection_controller_send_message("Err");
+    display_control_write_word("Err");
+    connection_control_send_message("Err");
     free(input);
-    security_system_controller_evaluate();
+    security_system_control_evaluate();
   }
 
   free(input);
 }
 
-void security_system_controller_toggle_status(bool remote) {
+void security_system_control_toggle_status(bool remote) {
   status = !status; // toggle the status
-  connection_controller_send_message(remote ? "SSCRemoteIoT" : "SSCLocal");
+  connection_control_send_message(remote ? "SSCRemoteIoT" : "SSCLocal");
 
   if (status) {
-    security_system_controller_activate();
+    security_system_control_activate();
     pc_comm_send_string_blocking("Unlocked\n");
   } else {
     pc_comm_send_string_blocking("Locked\n");
@@ -99,28 +94,28 @@ void security_system_controller_toggle_status(bool remote) {
   pc_comm_send_string_blocking("Changed\n");
 }
 
-void securiy_system_controller_change_pin_code(uint8_t *new_pin) {
+void security_system_control_change_pin_code(uint8_t *new_pin) {
   memcpy(&pin_code, new_pin, 4);
   free(new_pin);
   char str[20];
   sprintf(str, "newpin=%d%d%d%d\n", pin_code[0], pin_code[1], pin_code[2],
           pin_code[3]);
 
-  connection_controller_send_message(str);
+  connection_control_send_message(str);
   pc_comm_send_string_blocking(str);
 }
 
-void security_system_controller_override_pin_code() {
+void security_system_control_override_pin_code() {
   if (status) {
     _delay_ms(200);
-    display_controller_write_word("Edit");
+    display_control_write_word("Edit");
     _delay_ms(1000);
     uint8_t *new_pin_code = buttons_control_pin_code_input();
-    securiy_system_controller_change_pin_code(new_pin_code);
-    display_controller_write_word("OK");
+    security_system_control_change_pin_code(new_pin_code);
+    display_control_write_word("OK");
   } else {
     pc_comm_send_string_blocking("Unlock the device first\n");
-    display_controller_write_word("Err");
+    display_control_write_word("Err");
     _delay_ms(1000);
   }
 }

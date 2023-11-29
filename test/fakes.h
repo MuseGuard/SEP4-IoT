@@ -8,7 +8,7 @@
 #include "periodic_task.h"
 #include "pir.h"
 #include "wifi.h"
-#include "security_system_controller.h"
+#include "security_system_control.h"
 
 
 DEFINE_FFF_GLOBALS;

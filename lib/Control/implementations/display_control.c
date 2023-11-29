@@ -1,15 +1,10 @@
-#include "display.h"
-#include "display_controller.h"
-#include "pc_comm.h"
-#include <stddef.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "display_control.h"
 #include "includes.h"
 
-void display_controller_write_word(char *word) {
-  uint8_t *nums = display_controller_convert_word_to_numbers(word);
+#include "display.h"
+
+void display_control_write_word(char *word) {
+  uint8_t *nums = display_control_convert_word_to_numbers(word);
   uint8_t nums_len = (uint8_t)strlen(word);
 
   if (nums_len < 4) {
@@ -39,7 +34,7 @@ void display_controller_write_word(char *word) {
   free(nums);                        // Clean up memory
 }
 
-uint8_t *display_controller_convert_word_to_numbers(char *word) {
+uint8_t *display_control_convert_word_to_numbers(char *word) {
   uint8_t len = (uint8_t)strlen(word);
   uint8_t *result = malloc(len * sizeof(uint8_t));
 
@@ -77,8 +72,8 @@ uint8_t *display_controller_convert_word_to_numbers(char *word) {
   return result;
 }
 
-void display_controller_show_pin_code_position(uint8_t *pin_code,
-                                               uint8_t current_position) {
+void display_control_show_pin_code_position(uint8_t *pin_code,
+                                            uint8_t current_position) {
   switch (current_position) {
   case 0:
     display_setValues(39, pin_code[1], pin_code[2], pin_code[3]);
