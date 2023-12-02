@@ -18,7 +18,8 @@ void servo(uint8_t angle)
 
     // Convert angle to pulse width in microseconds
     // 500us pulse width for 0 degrees, 2120us pulse width for 180 degrees
-    uint16_t delay_us = ((uint16_t)angle) * 9 + 500;
+    // uint16_t delay_us = ((uint16_t)angle) * 9 + 500;
+    uint16_t delay_us = ((uint16_t)angle) * 8 + 500;
 
     // Initialize Timer2 in normal 
     uint8_t TCCR2A_state= TCCR2A;//
@@ -31,7 +32,8 @@ void servo(uint8_t angle)
     // Calculate the number of timer ticks needed for the specified delay
     uint8_t num_ticks = ((F_CPU / 1000000UL) * delay_us) / 256;
 
-    for (uint16_t i = 0; i < 50; i++)//Wee assume it can get there in 1sec (50*20ms)
+    // for (uint16_t i = 0; i < 50; i++)//Wee assume it can get there in 1sec (50*20ms)
+    for (uint16_t i = 0; i < 30; i++)//Wee assume it can get there in 1sec (50*20ms)
     {
         // Set PA1 high
         PORT_SERVO |= (1 << P_SERVO);
@@ -45,7 +47,8 @@ void servo(uint8_t angle)
         // Set PA1 low
         PORT_SERVO &= ~(1 << P_SERVO);
         
-        _delay_ms(18); // thats dirty TODO, make this pricise.
+        _delay_ms(20); // thats dirty TODO, make this pricise.
+        // _delay_ms(5); // thats dirty TODO, make this pricise.
     }
 
    TCCR2A =TCCR2A_state ; //finished borrowing timer2. 

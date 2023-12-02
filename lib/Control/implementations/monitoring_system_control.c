@@ -1,6 +1,6 @@
 #include "includes.h"
 #include "monitoring_system_control.h"
-
+#include "radar_control.h"
 #include "connection_control.h"
 #include "dht11.h"
 #include "light.h"
@@ -14,6 +14,7 @@ void monitoring_system_control_init() // Initializes all sensors
 {
   dht11_init();
   light_init();
+  radar_control_init();
 }
 
 void monitoring_system_control_execute() // Getting data from all sensors and
@@ -29,3 +30,8 @@ void monitoring_system_control_execute() // Getting data from all sensors and
   connection_control_transmit(package);
   pc_comm_send_string_blocking(package.data);
 };
+
+void monitoring_radar_system()
+{
+  radar_control_start();
+}

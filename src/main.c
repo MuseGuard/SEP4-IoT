@@ -12,10 +12,12 @@
 #include "wifi.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "radar_control.h"
 
 int main() {
   display_init();
   buttons_init();
+  // radar_control_init();
 
   pc_comm_init(9600, NULL);
 
@@ -23,13 +25,14 @@ int main() {
   monitoring_system_control_init();
 
   timer_init_a(monitoring_system_control_execute, 5000);
-  // timer_init_b(buttons_control_listen, 100  );
+  timer_init_b(radar_control_start, 20000);
+  
+  while (1) {
+    buttons_control_listen();
+    _delay_ms(1000);
+  }
 
   /* uint8_t pin_code[4] = {5, 6, 7, 8};
   security_system_control_change_pin_code((uint8_t *)&pin_code); */
-  while (1) {
-    buttons_control_listen();
-    _delay_ms(100);
-  }
   return 0;
 }

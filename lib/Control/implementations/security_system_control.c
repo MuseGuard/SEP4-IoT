@@ -1,5 +1,6 @@
 // #ifndef WINDOWS_TEST
 #include "security_system_control.h"
+#include "radar_control.h"
 #include "includes.h"
 
 #include "buttons_control.h"
@@ -39,6 +40,7 @@ void security_system_control_activate() {
 
   pc_comm_send_string_blocking("PIR Activated\n");
 };
+
 
 bool security_system_control_check_pin_code(uint8_t *input_code) {
   bool areEqual = false;
