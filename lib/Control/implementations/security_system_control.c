@@ -70,10 +70,10 @@ void security_system_control_evaluate() {
   pc_comm_send_string_blocking(str);
   if (areEqual) {
     security_system_control_toggle_status(false);
-  } else {
+  } else {    
     pc_comm_send_string_blocking("Err\n");
     display_control_write_word("Err");
-    connection_control_send_message("Err");
+/*     connection_control_send_message("Err"); */
     free(input);
     security_system_control_evaluate();
   }
@@ -83,7 +83,6 @@ void security_system_control_evaluate() {
 
 void security_system_control_toggle_status(bool remote) {
   status = !status; // toggle the status
-  connection_control_send_message(remote ? "SSCRemoteIoT" : "SSCLocal");
 
   if (status) {
     security_system_control_activate();
@@ -91,18 +90,18 @@ void security_system_control_toggle_status(bool remote) {
   } else {
     pc_comm_send_string_blocking("Locked\n");
   }
-  pc_comm_send_string_blocking("Changed\n");
+  connection_control_send_message(remote ? "SSCRemote" : "SSCLocal");
 }
 
 void security_system_control_change_pin_code(uint8_t *new_pin) {
   memcpy(&pin_code, new_pin, 4);
   free(new_pin);
   char str[20];
-  sprintf(str, "newpin=%d%d%d%d\n", pin_code[0], pin_code[1], pin_code[2],
+  sprintf(str, "NewPIN=%d%d%d%d\n", pin_code[0], pin_code[1], pin_code[2],
           pin_code[3]);
 
-  connection_control_send_message(str);
   pc_comm_send_string_blocking(str);
+  connection_control_send_message(str);
 }
 
 void security_system_control_override_pin_code() {

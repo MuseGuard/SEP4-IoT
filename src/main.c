@@ -18,15 +18,13 @@ int main() {
   buttons_init();
 
   pc_comm_init(9600, NULL);
+  
 
   connection_control_init();
   monitoring_system_control_init();
 
   timer_init_a(monitoring_system_control_execute, 5000);
-  // timer_init_b(buttons_control_listen, 100  );
-
-  /* uint8_t pin_code[4] = {5, 6, 7, 8};
-  security_system_control_change_pin_code((uint8_t *)&pin_code); */
+  
   while (1) {
     buttons_control_listen();
     _delay_ms(100);

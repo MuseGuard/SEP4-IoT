@@ -2,6 +2,7 @@
 #include "includes.h"
 
 #include "display.h"
+#include <ctype.h>
 
 void display_control_write_word(char *word) {
   uint8_t *nums = display_control_convert_word_to_numbers(word);
@@ -30,7 +31,7 @@ void display_control_write_word(char *word) {
     _delay_ms(1000);
   }
 
-  display_setValues(37, 37, 37, 37); // Clear the display (show 4 spaces
+  display_setValues(37, 37, 37, 37); // Clear the display (show 4 spaces)
   free(nums);                        // Clean up memory
 }
 
@@ -42,12 +43,9 @@ uint8_t *display_control_convert_word_to_numbers(char *word) {
     char current_letter = word[i];
     uint8_t numeric_value = 0;
 
-    if (current_letter >= 'A' && current_letter <= 'z') {
-      numeric_value = current_letter % 32 + 9;
-      /*  'A' and 'a' in decimal %32 are 1 -> instead of
-            toLowerCase() / toUpperCase() */
-      //  9 is the offset to the first letter in the display_data array
-    } else if (current_letter >= '0' && current_letter <= '9') {
+    if (isalpha(current_letter)) {
+      numeric_value = toupper(current_letter)-'A'+ 10;
+    } else if (isdigit(current_letter)) {
       numeric_value = current_letter % 48;
     } else {
       switch (current_letter) {
