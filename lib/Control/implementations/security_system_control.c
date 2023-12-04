@@ -1,17 +1,17 @@
 // #ifndef WINDOWS_TEST
 #include "security_system_control.h"
-#include "includes.h"
-
 #include "buttons_control.h"
 #include "buzzer.h"
 #include "connection_control.h"
 #include "display.h"
 #include "display_control.h"
-#include "package_builder.h"
+#include "includes.h"
+#include "message_builder.h"
 #include "pir.h"
 
 static uint8_t pin_code[4] = {1, 2, 3, 4};
 static bool status = false;
+
 static bool is_pir_calibrating = true;
 
 // Send notification to the server when motion is detected
@@ -19,11 +19,9 @@ void security_system_control_send_notification() {
   if (status && !is_pir_calibrating) {
     sei();
     buzzer_beep();
-    Package package = package_builder_build_motion_detected();
-    connection_control_transmit(package);
-    pc_comm_send_string_blocking("Motion detected\n");
+    connection_control_send_message("Motion Detected");
     cli();
-    }
+  }
 }
 
 void security_system_control_activate() {
@@ -61,7 +59,7 @@ bool security_system_control_check_pin_code(uint8_t *input_code) {
   return areEqual;
 }
 
-void security_system_control_evaluate() {
+/* void security_system_control_evaluate() {
 
   uint8_t *input = buttons_control_pin_code_input();
   bool areEqual = security_system_control_check_pin_code(input);
@@ -70,52 +68,41 @@ void security_system_control_evaluate() {
   pc_comm_send_string_blocking(str);
   if (areEqual) {
     security_system_control_toggle_status(false);
-  } else {    
+  } else {
     pc_comm_send_string_blocking("Err\n");
     display_control_write_word("Err");
-/*     connection_control_send_message("Err"); */
     free(input);
     security_system_control_evaluate();
   }
 
   free(input);
-}
+} */
 
-void security_system_control_toggle_status(bool remote) {
+char *security_system_control_toggle_status(bool remote) {
   status = !status; // toggle the status
-
   if (status) {
     security_system_control_activate();
     pc_comm_send_string_blocking("Unlocked\n");
   } else {
     pc_comm_send_string_blocking("Locked\n");
   }
-  connection_control_send_message(remote ? "SSCRemote" : "SSCLocal");
+  return remote ? "SSCRemote" : "SSCLocal";
+
+  // connection_control_send_message(remote ? "SSCRemote" : "SSCLocal");
 }
 
-void security_system_control_change_pin_code(uint8_t *new_pin) {
+char *security_system_control_change_pin_code(uint8_t *new_pin) {
   memcpy(&pin_code, new_pin, 4);
   free(new_pin);
-  char str[20];
+  char *str = malloc(20 * sizeof(char));
   sprintf(str, "NewPIN=%d%d%d%d\n", pin_code[0], pin_code[1], pin_code[2],
           pin_code[3]);
 
   pc_comm_send_string_blocking(str);
-  connection_control_send_message(str);
+  // connection_control_send_message(str);
+  return str;
 }
 
-void security_system_control_override_pin_code() {
-  if (status) {
-    _delay_ms(200);
-    display_control_write_word("Edit");
-    _delay_ms(1000);
-    uint8_t *new_pin_code = buttons_control_pin_code_input();
-    security_system_control_change_pin_code(new_pin_code);
-    display_control_write_word("OK");
-  } else {
-    pc_comm_send_string_blocking("Unlock the device first\n");
-    display_control_write_word("Err");
-    _delay_ms(1000);
-  }
-}
+bool security_system_control_is_on() { return status; }
+
 // #endif

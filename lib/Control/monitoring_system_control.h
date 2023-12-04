@@ -1,4 +1,5 @@
 #pragma once
+#include "message_builder.h"
 
 void monitoring_system_control_init();
-void monitoring_system_control_execute();
+char *monitoring_system_control_execute();

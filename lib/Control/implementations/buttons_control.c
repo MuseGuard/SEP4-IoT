@@ -1,9 +1,11 @@
-#include "buttons.h"
 #include "buttons_control.h"
+#include "buttons.h"
 #include "display.h"
 #include "display_control.h"
 #include "includes.h"
 #include "security_system_control.h"
+
+void buttons_control_init() { buttons_init(); }
 
 uint8_t *buttons_control_pin_code_input() {
   uint8_t *pin_code =
@@ -42,15 +44,14 @@ uint8_t *buttons_control_pin_code_input() {
   return pin_code;
 }
 
-void buttons_control_listen() {
+uint8_t buttons_control_listen() {
   if (buttons_1_pressed()) {
-    // LOCK / UNLOCK
-    _delay_ms(200);
-    security_system_control_evaluate();
+    return 1;
   } else if (buttons_2_pressed()) {
-    // figure something out
+    return 2;
   } else if (buttons_3_pressed()) {
-    security_system_control_override_pin_code();
+    return 3;
+  } else {
+    return 0;
   }
-  display_setValues(33, 18, 37, 37); // Show "Hi  "
 }

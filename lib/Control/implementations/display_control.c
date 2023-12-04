@@ -4,6 +4,8 @@
 #include "display.h"
 #include <ctype.h>
 
+void display_control_init() { display_init(); }
+
 void display_control_write_word(char *word) {
   uint8_t *nums = display_control_convert_word_to_numbers(word);
   uint8_t nums_len = (uint8_t)strlen(word);
@@ -44,7 +46,7 @@ uint8_t *display_control_convert_word_to_numbers(char *word) {
     uint8_t numeric_value = 0;
 
     if (isalpha(current_letter)) {
-      numeric_value = toupper(current_letter)-'A'+ 10;
+      numeric_value = toupper(current_letter) - 'A' + 10;
     } else if (isdigit(current_letter)) {
       numeric_value = current_letter % 48;
     } else {

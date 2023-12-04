@@ -1,6 +1,5 @@
 #include "connection_control.h"
 #include "includes.h"
-
 #include "request_interpreter.h"
 #include "security_system_control.h"
 #include "wifi.h"
@@ -34,7 +33,7 @@ bool connection_control_init(void) {
     pc_comm_send_string_blocking("Connected to AP!\n");
 
     WIFI_ERROR_MESSAGE_t connect_to_server = wifi_command_create_TCP_connection(
-        "192.168.214.98", 23, connection_control_callbackFunc, buffer);
+        "192.168.214.218", 23, connection_control_callbackFunc, buffer);
 
     if (connect_to_server == WIFI_OK) {
       pc_comm_send_string_blocking("Connected to server!\n");
@@ -52,16 +51,9 @@ bool connection_control_init(void) {
   return result;
 }
 
-bool connection_control_transmit(Package package) {
-  WIFI_ERROR_MESSAGE_t result =
-      wifi_command_TCP_transmit((uint8_t *)package.data, package.size);
-  bool return_value = result == WIFI_OK ? true : false;
-  return return_value;
-}
 
 bool connection_control_send_message(char *message) {
   WIFI_ERROR_MESSAGE_t result =
       wifi_command_TCP_transmit((uint8_t *)message, strlen(message));
-  bool return_value = result == WIFI_OK ? true : false;
-  return return_value;
+      return result == WIFI_OK;
 }
