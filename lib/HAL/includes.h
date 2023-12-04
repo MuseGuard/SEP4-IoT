@@ -6,8 +6,11 @@
 #include <util/delay.h>
 #endif
 
+#include <stdbool.h>
 #include <stddef.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
+#include "pc_comm.h"

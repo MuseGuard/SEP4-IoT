@@ -33,13 +33,13 @@ jobs:
         run: pio test -e win_test_light -f "test_win_light"
 
       - name: Run Connection Controller Test.
-        run: pio test -e win_test_connection_controller -f "test_connection_controller"
+        run: pio test -e win_test_connection_control -f "test_connection_control"
 
       - name: Run Monitoring Controller Test.
-        run: pio test -e win_test_monitoring_controller -f "test_monitoring_controller" 
+        run: pio test -e win_test_monitoring_control -f "test_monitoring_control" 
 
       - name: Run Security Controller Test.
-        run: pio test -e win_test_security_controller -f "test_security_controller"      
+        run: pio test -e win_test_security_control -f "test_security_control"      
 
       - name: Build The Project.
         run: pio run -e ATmega2560
