@@ -108,8 +108,7 @@ void test_connection_control_transmit_success(void) {
   // TEST_ASSERT_EQUAL(1, 0);
   wifi_command_TCP_transmit_fake.return_val = WIFI_OK;
 
-  Package package = {.data = "T=22.5/H=30/L=600", .size = strlen(package.data)};
-  bool result = connection_control_transmit(package);
+  bool result = connection_control_send_message("T=22.5/H=30/L=600");
 
   TEST_ASSERT_TRUE(result);
 }
@@ -118,8 +117,7 @@ void test_connection_control_transmit_fail(void) {
   // TEST_ASSERT_EQUAL(1, 0);
   wifi_command_TCP_transmit_fake.return_val = WIFI_FAIL;
 
-  Package package = {.data = "T=22.5/H=30/L=600", .size = strlen(package.data)};
-  bool result = connection_control_transmit(package);
+ bool result = connection_control_send_message("T=22.5/H=30/L=600");
 
   TEST_ASSERT_FALSE(result);
 }

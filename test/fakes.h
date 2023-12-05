@@ -9,6 +9,7 @@
 #include "pir.h"
 #include "wifi.h"
 #include "security_system_control.h"
+#include "message_builder.h"
 
 
 DEFINE_FFF_GLOBALS;
@@ -59,4 +60,5 @@ FAKE_VOID_FUNC(cli);
 FAKE_VOID_FUNC(sei);
 FAKE_VOID_FUNC(_delay_ms, int);
 
-
+//Message Builder
+FAKE_VALUE_FUNC(char*, message_builder_build_monitor, int8_t, uint8_t, uint8_t, uint16_t);

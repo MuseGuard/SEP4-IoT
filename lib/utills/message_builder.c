@@ -1,3 +1,4 @@
+
 #include "message_builder.h"
 #include "includes.h"
 #include "pc_comm.h"
@@ -5,8 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Static variable for Package data
-
+#ifndef WINDOWS_TEST
 char *message_builder_build_monitor(int8_t temperature_integer,
                                     uint8_t temperature_decimal,
                                     uint8_t humidity_integer,
@@ -17,3 +17,4 @@ char *message_builder_build_monitor(int8_t temperature_integer,
 
   return str;
 }
+#endif
