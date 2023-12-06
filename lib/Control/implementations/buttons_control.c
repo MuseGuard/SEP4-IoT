@@ -3,12 +3,11 @@
 #include "display.h"
 #include "display_control.h"
 #include "includes.h"
-#include "security_system_control.h"
 
 
 void buttons_control_init() { buttons_init(); }
 
-uint8_t *buttons_control_pin_code_input() {
+/* uint8_t *buttons_control_pin_code_input() {
   uint8_t *pin_code =
       malloc(4 * sizeof(uint8_t));          // allocate memory for pin_code
   memset(pin_code, 0, 4 * sizeof(uint8_t)); // initialize with 4 zeros
@@ -44,7 +43,7 @@ uint8_t *buttons_control_pin_code_input() {
 
   return pin_code;
 }
-
+ */
 uint8_t buttons_control_listen() {
   if (buttons_1_pressed()) {
     return 1;

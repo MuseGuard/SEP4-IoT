@@ -2,6 +2,7 @@
 
 void buttons_control_init();
 
-uint8_t *buttons_control_pin_code_input();
+// TODO: remove
+uint8_t *buttons_control_pin_code_input(); 
 
 uint8_t buttons_control_listen();
