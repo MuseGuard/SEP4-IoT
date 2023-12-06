@@ -8,7 +8,6 @@
 #include "periodic_task.h"
 #include "pir.h"
 #include "wifi.h"
-#include "security_system_control.h"
 #include "message_builder.h"
 
 
@@ -18,11 +17,6 @@ DEFINE_FFF_GLOBALS;
  * 
  */
 
-
-//BUTTONS
-FAKE_VALUE_FUNC(uint8_t, buttons_1_pressed);
-FAKE_VALUE_FUNC(uint8_t, buttons_2_pressed);
-FAKE_VALUE_FUNC(uint8_t, buttons_3_pressed);
 
 //BUZZER
 FAKE_VOID_FUNC(buzzer_beep);
