@@ -80,17 +80,24 @@ bool security_system_control_check_pin_code(uint8_t *input_code) {
 
 char *security_system_control_toggle_status(bool remote) {
   status = !status; // toggle the status
+  pc_comm_send_string_blocking(status ? "True\n\n" : "False\n\n");
+
   if (status) {
     security_system_control_activate();
     pc_comm_send_string_blocking("Unlocked\n");
   } else {
     pc_comm_send_string_blocking("Locked\n");
   }
-  return remote ? "SSCRemote" : "SSCLocal";
+
+  char *message = malloc(10 * sizeof(char));
+  sprintf(message, remote ? "SSCRemote" : "SSCLocal");
+
+  return message;
 
   // connection_control_send_message(remote ? "SSCRemote" : "SSCLocal");
 }
 
+// TODO move the message to Application and just return a bool
 char *security_system_control_change_pin_code(uint8_t *new_pin) {
   memcpy(&pin_code, new_pin, 4);
   free(new_pin);
@@ -99,7 +106,7 @@ char *security_system_control_change_pin_code(uint8_t *new_pin) {
           pin_code[3]);
 
   pc_comm_send_string_blocking(str);
-  // connection_control_send_message(str);
+  connection_control_send_message(str);
   return str;
 }
 
