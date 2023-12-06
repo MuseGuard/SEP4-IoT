@@ -28,14 +28,13 @@ void security_system_control_activate() {
   pir_init(security_system_control_send_notification);
   int i = 10;
 
+  pc_comm_send_string_blocking("PIR Activated\n");
   while (i != 0) {
     display_int(i);
     _delay_ms(1000);
     i--;
   }
   is_pir_calibrating = false;
-
-  pc_comm_send_string_blocking("PIR Activated\n");
 };
 
 bool security_system_control_check_pin_code(uint8_t *input_code) {
@@ -80,7 +79,6 @@ bool security_system_control_check_pin_code(uint8_t *input_code) {
 
 char *security_system_control_toggle_status(bool remote) {
   status = !status; // toggle the status
-  pc_comm_send_string_blocking(status ? "True\n\n" : "False\n\n");
 
   if (status) {
     security_system_control_activate();
