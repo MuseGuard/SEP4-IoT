@@ -5,6 +5,7 @@
 #include "includes.h"
 #include "security_system_control.h"
 
+
 void buttons_control_init() { buttons_init(); }
 
 uint8_t *buttons_control_pin_code_input() {

@@ -21,6 +21,12 @@ DEFINE_FFF_GLOBALS;
 //BUZZER
 FAKE_VOID_FUNC(buzzer_beep);
 
+//BUTTONS
+FAKE_VOID_FUNC(buttons_init);
+FAKE_VALUE_FUNC(uint8_t , buttons_1_pressed);
+FAKE_VALUE_FUNC(uint8_t , buttons_2_pressed);
+FAKE_VALUE_FUNC(uint8_t , buttons_3_pressed);
+
 //DHT11
 FAKE_VOID_FUNC(dht11_init);
 FAKE_VALUE_FUNC(DHT11_ERROR_MESSAGE_t, dht11_get, uint8_t*, uint8_t*, uint8_t*, uint8_t*);
