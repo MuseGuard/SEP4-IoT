@@ -8,13 +8,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() 
-{
-    pc_comm_init(9600, NULL);
-    application_init();
-    
-    while (1) {
-        application_run();
-    }
-    return 0;
+int main() {
+  application_init();
+
+  while (1) {
+    application_run();
+  }
+  return 0;
 }

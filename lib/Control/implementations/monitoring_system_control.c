@@ -29,8 +29,7 @@ char *monitoring_system_control_execute() // Getting data from all sensors and
     // Give the package a new value
 
     char *result =
-        message_builder_build_monitor(temperature_integer, temperature_decimal,
-                                      humidity_integer, light_levels);
+        message_builder_build_monitor(temperature_integer, temperature_decimal,humidity_integer, light_levels);
     strcpy(message, result);
     free(result);
   }

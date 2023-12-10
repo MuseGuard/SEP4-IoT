@@ -18,12 +18,14 @@ void setUp(void) {
 
 void tearDown(void) {}
 
+server_callback_t callback_fake;
+
 void test_connection_control_init_success(void) {
   // TEST_ASSERT_EQUAL(1, 0);
   wifi_command_join_AP_fake.return_val = WIFI_OK;
   wifi_command_create_TCP_connection_fake.return_val = WIFI_OK;
 
-  bool result = connection_control_init();
+  bool result = connection_control_init(callback_fake);
 
   TEST_ASSERT_TRUE(result);
   TEST_ASSERT_EQUAL(1, wifi_command_join_AP_fake.call_count);
@@ -49,7 +51,7 @@ void test_connection_control_init_fail_TCP_connection(void) {
   wifi_command_join_AP_fake.return_val = WIFI_OK;
   wifi_command_create_TCP_connection_fake.return_val = WIFI_FAIL;
 
-  bool result = connection_control_init();
+  bool result = connection_control_init(callback_fake);
 
   TEST_ASSERT_FALSE(result);
   TEST_ASSERT_EQUAL(1, wifi_command_join_AP_fake.call_count);
@@ -65,7 +67,7 @@ void test_connection_control_init_fail_TCP_connection(void) {
 void test_connection_control_init_success_AP(void) {
   wifi_command_join_AP_fake.return_val = WIFI_OK;
   wifi_command_create_TCP_connection_fake.return_val = WIFI_FAIL;
-  bool result = connection_control_init();
+  bool result = connection_control_init(callback_fake);
 
   TEST_ASSERT_FALSE(result);
   TEST_ASSERT_EQUAL_STRING("Connected to AP!\n",
@@ -80,7 +82,7 @@ void test_connection_control_init_fail_AP(void) {
   // TEST_ASSERT_EQUAL(1, 0);
   wifi_command_join_AP_fake.return_val = WIFI_ERROR_NOT_RECEIVING;
 
-  bool result = connection_control_init();
+  bool result = connection_control_init(callback_fake);
 
   TEST_ASSERT_FALSE(result);
   TEST_ASSERT_EQUAL(1, pc_comm_send_string_blocking_fake.call_count);
@@ -93,7 +95,7 @@ void test_connection_control_init_fail_AP(void) {
 void test_connection_control_init_success_AP_and_success_server(void) {
   wifi_command_join_AP_fake.return_val = WIFI_OK;
   wifi_command_create_TCP_connection_fake.return_val = WIFI_OK;
-  bool result = connection_control_init();
+  bool result = connection_control_init(callback_fake);
 
   TEST_ASSERT_FALSE(result);
   TEST_ASSERT_EQUAL_STRING("Connected to AP!\n",

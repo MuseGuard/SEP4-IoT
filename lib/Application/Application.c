@@ -5,12 +5,10 @@
 #include "display_control.h"
 #include "includes.h"
 #include "monitoring_system_control.h"
+#include "pc_comm.h"
 #include "periodic_task.h"
+#include "request_interpreter.h"
 #include "security_system_control.h"
-
-/* void application_motion_detected() {
-  connection_control_send_message("Motion detected");
-} */
 
 // Take measurements from the sensors(Temp, Humidity & Light) and send them to
 // the server
@@ -29,7 +27,6 @@ void application_get_new_pin() {
     char *message = security_system_control_change_pin_code(new_pin_code);
     pc_comm_send_string_blocking(message);
     connection_control_send_message(message);
-    pc_comm_send_string_blocking("Pin code changed\n");
     free(message);
     display_control_write_word("OK");
   } else {
@@ -60,7 +57,7 @@ uint8_t *application_take_pin_input() {
     } else {
       if (button_number == 2) {
         current_position--;
-      } else if (button_number == 3){
+      } else if (button_number == 3) {
         current_position++;
       }
       display_control_show_pin_code_position(pin_code, current_position);
@@ -85,9 +82,13 @@ void application_buttons_listen() {
   case 3:
     application_get_new_pin();
     break;
+  case 2:
+    apllication_on_message_received_callback("ChangePIN=1250");
+    break;
   default:
     break;
   }
+  _delay_ms(100);
   display_setValues(33, 18, 37, 37); // Show "Hi  "
 }
 
@@ -108,10 +109,36 @@ void application_evaluate_pin() {
   }
 }
 
-// Initialize all the modules
+void apllication_on_message_received_callback(char *buffer) {
+  pc_comm_send_string_blocking(buffer);
+  pc_comm_send_string_blocking("\n");
+  if (strcmp(buffer, "ChangeSecurityStatus") == 0) {
+    security_system_control_toggle_status(true);
+    char *message = security_system_control_toggle_status(true);
+    pc_comm_send_string_blocking(message);
+    connection_control_send_message(message);
+    free(message);
+  } else if (strstr(buffer, "ChangePIN") == buffer) {
+    uint8_t *pin_code = request_interpreter_get_pin(buffer);
+    char *message = security_system_control_change_pin_code(pin_code);
+    pc_comm_send_string_blocking(message);
+    connection_control_send_message(message);
+    free(message);
+  } else {
+    connection_control_send_message("Invalid command!");
+  }
+}
+
+void application_pir_callback() {
+  connection_control_send_message("Motion Detected");
+  pc_comm_send_string_blocking("Motion Detected\n");
+}
+
 void application_init() {
+  pc_comm_init(9600, NULL);
   display_control_init();
-  connection_control_init();
+  connection_control_init(apllication_on_message_received_callback);
+  security_system_control_init(application_pir_callback);
   monitoring_system_control_init();
   buttons_control_init();
 
@@ -119,7 +146,4 @@ void application_init() {
 }
 
 // Run the application after initialization
-void application_run() {
-  application_buttons_listen();
-  _delay_ms(100);
-}
+void application_run() { application_buttons_listen(); }
