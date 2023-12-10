@@ -38,7 +38,7 @@ bool connection_control_init(void) {
     pc_comm_send_string_blocking("Connected to AP!\n");
 
     WIFI_ERROR_MESSAGE_t connect_to_server = wifi_command_create_TCP_connection(
-        "192.168.214.98", 23, connection_control_callbackFunc, buffer);
+        "34.88.237.151", 23, connection_control_callbackFunc, buffer);
 
     if (connect_to_server == WIFI_OK) {
       pc_comm_send_string_blocking("Connected to server!\n");

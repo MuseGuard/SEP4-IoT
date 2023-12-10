@@ -18,7 +18,6 @@ void application_take_measurements() {
   char *message = monitoring_system_control_execute();
   connection_control_send_message(message);
   pc_comm_send_string_blocking(message);
-  free(message);
 }
 
 // Change the pin code on the device (On-Site)
