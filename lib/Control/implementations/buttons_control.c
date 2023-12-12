@@ -1,7 +1,7 @@
+#ifndef WINDOWS_TEST_APPLICATION
 #include "buttons_control.h"
 #include "buttons.h"
 #include "includes.h"
-
 void buttons_control_init() { buttons_init(); }
 
 uint8_t buttons_control_listen() {
@@ -15,3 +15,4 @@ uint8_t buttons_control_listen() {
     return 0;
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST_APPLICATION
 #include "connection_control.h"
 #include "includes.h"
 #include "pc_comm.h"
@@ -9,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 
 static char buffer[25];
 static server_callback_t application_callback_function;
@@ -54,3 +56,4 @@ bool connection_control_send_message(char *message) {
       wifi_command_TCP_transmit((uint8_t *)message, strlen(message));
   return result == WIFI_OK;
 }
+#endif

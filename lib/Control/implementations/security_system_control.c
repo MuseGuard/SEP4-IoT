@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST_APPLICATION
 // #ifndef WINDOWS_TEST
 #include "security_system_control.h"
 #include "buzzer.h"
@@ -5,7 +6,6 @@
 #include "includes.h"
 #include "pc_comm.h"
 #include "pir.h"
-
 static uint8_t pin_code[4] = {1, 2, 3, 4};
 
 static bool status = false;
@@ -86,4 +86,4 @@ void security_system_control_init(pir_detection_callback_t callback) {
   pir_callback = callback;
 }
 
-// #endif
+#endif

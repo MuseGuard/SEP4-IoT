@@ -1,8 +1,10 @@
+#ifndef WINDOWS_TEST_APPLICATION
 #include "display_control.h"
 #include "includes.h"
 
 #include "display.h"
 #include <ctype.h>
+
 
 void display_control_init() { display_init(); }
 
@@ -92,3 +94,4 @@ void display_control_show_pin_code_position(uint8_t *pin_code,
   }
   _delay_ms(1);
 }
+#endif

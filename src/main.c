@@ -9,6 +9,7 @@
 #include <stdlib.h>
 
 int main() {
+  pc_comm_init(9600, NULL);
   application_init();
 
   while (1) {

@@ -5,10 +5,12 @@
 #include "display_control.h"
 #include "includes.h"
 #include "monitoring_system_control.h"
-#include "pc_comm.h"
-#include "periodic_task.h"
 #include "request_interpreter.h"
 #include "security_system_control.h"
+#include "pc_comm.h"
+#ifndef WINDOWS_TEST_APPLICATION
+#include "periodic_task.h"
+#endif
 
 // Take measurements from the sensors(Temp, Humidity & Light) and send them to
 // the server
@@ -19,21 +21,25 @@ void application_take_measurements() {
 }
 
 // Change the pin code on the device (On-Site)
-void application_get_new_pin() {
-  if (security_system_control_is_on()) {
-    _delay_ms(200);
-    display_control_write_word("Edit");
-    uint8_t *new_pin_code = application_take_pin_input();
-    char *message = security_system_control_change_pin_code(new_pin_code);
-    pc_comm_send_string_blocking(message);
-    connection_control_send_message(message);
-    free(message);
-    display_control_write_word("OK");
-  } else {
-    pc_comm_send_string_blocking("Unlock the device first\n");
-    display_control_write_word("Err");
-    _delay_ms(1000);
-  }
+void application_get_new_pin() 
+{
+    if (security_system_control_is_on()) 
+    {
+        _delay_ms(200);
+        display_control_write_word("Edit");
+        uint8_t *new_pin_code = application_take_pin_input();
+        char *message = security_system_control_change_pin_code(new_pin_code);
+        pc_comm_send_string_blocking(message);
+        connection_control_send_message(message);
+        free(message);
+        display_control_write_word("OK");
+    } 
+    else
+    {
+        pc_comm_send_string_blocking("Unlock the device first\n");
+        display_control_write_word("Err");
+        _delay_ms(1000);
+    }
 }
 
 uint8_t *application_take_pin_input() {
@@ -135,14 +141,15 @@ void application_pir_callback() {
 }
 
 void application_init() {
-  pc_comm_init(9600, NULL);
+  //pc_comm_init(9600, NULL);
   display_control_init();
   connection_control_init(apllication_on_message_received_callback);
   security_system_control_init(application_pir_callback);
   monitoring_system_control_init();
   buttons_control_init();
-
+#ifndef WINDOWS_TEST_APPLICATION
   timer_init_a(application_take_measurements, 5000);
+  #endif
 }
 
 // Run the application after initialization

@@ -9,6 +9,7 @@
 #include "pir.h"
 #include "wifi.h"
 #include "message_builder.h"
+#include "periodic_task.h"
 
 
 DEFINE_FFF_GLOBALS;
@@ -42,6 +43,7 @@ FAKE_VOID_FUNC(light_init);
 FAKE_VALUE_FUNC(uint16_t, light_read);
 
 //PC_COMM
+FAKE_VOID_FUNC(pc_comm_init, uint32_t, pc_comm_callback_t);
 FAKE_VOID_FUNC(pc_comm_send_string_blocking, char*);
 
 //PERIODIC_TASK
@@ -62,3 +64,6 @@ FAKE_VOID_FUNC(_delay_ms, int);
 
 //Message Builder
 FAKE_VALUE_FUNC(char*, message_builder_build_monitor, int8_t, uint8_t, uint8_t, uint16_t);
+
+
+//Periodic Task

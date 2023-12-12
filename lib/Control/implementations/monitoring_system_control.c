@@ -1,3 +1,4 @@
+#ifndef WINDOWS_TEST_APPLICATION
 #include "monitoring_system_control.h"
 #include "dht11.h"
 #include "includes.h"
@@ -35,3 +36,4 @@ char *monitoring_system_control_execute() // Getting data from all sensors and
   }
   return message;
 }
+#endif
