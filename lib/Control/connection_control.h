@@ -1,7 +1,9 @@
 #pragma once
-#include "package_builder.h"
+#include "message_builder.h"
 #include <stdbool.h>
 
-bool connection_control_init(void);
-bool connection_control_transmit(Package package);
+typedef void (*server_callback_t)(char *);
+
+void connection_control_callback();
+bool connection_control_init(server_callback_t callback);
 bool connection_control_send_message(char *message);

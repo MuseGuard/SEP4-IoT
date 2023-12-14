@@ -2,10 +2,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+typedef void (*pir_detection_callback_t)(void);
+
 bool security_system_control_check_pin_code(uint8_t *input_code);
 void security_system_control_activate();
-void security_system_control_evaluate();
-void security_system_control_toggle_status(bool remote);
+char *security_system_control_toggle_status(bool remote);
 void security_system_control_send_notification();
-void security_system_control_change_pin_code(uint8_t *new_pin);
-void security_system_control_override_pin_code();
+char *security_system_control_change_pin_code(uint8_t *new_pin);
+bool security_system_control_is_on();
+void security_system_control_init(pir_detection_callback_t callback);
