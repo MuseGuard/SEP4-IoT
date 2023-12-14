@@ -23,7 +23,7 @@ void application_take_measurements() {
 // Change the pin code on the device (On-Site)
 void application_get_new_pin() 
 {
-    if (security_system_control_is_on()) 
+    if (security_system_control_is_on())
     {
         _delay_ms(200);
         display_control_write_word("Edit");
@@ -42,7 +42,8 @@ void application_get_new_pin()
     }
 }
 
-uint8_t *application_take_pin_input() {
+uint8_t *application_take_pin_input() 
+{
   uint8_t *pin_code =
       malloc(4 * sizeof(uint8_t));          // allocate memory for pin_code
   memset(pin_code, 0, 4 * sizeof(uint8_t)); // initialize with 4 zeros
@@ -88,9 +89,6 @@ void application_buttons_listen() {
   case 3:
     application_get_new_pin();
     break;
-  case 2:
-    apllication_on_message_received_callback("ChangePIN=1250");
-    break;
   default:
     break;
   }
@@ -99,20 +97,21 @@ void application_buttons_listen() {
 }
 
 // Check if the pin code is correct
-void application_evaluate_pin() {
-  uint8_t *input = application_take_pin_input();
-  bool areEqual = security_system_control_check_pin_code(input);
-  free(input);
-  if (areEqual) {
-    char *message = security_system_control_toggle_status(false);
-    pc_comm_send_string_blocking(message);
-    connection_control_send_message(message);
-    free(message);
-    display_control_write_word("OK");
-  } else {
-    pc_comm_send_string_blocking("Err\n");
-    display_control_write_word("Err");
-  }
+void application_evaluate_pin() 
+{
+    uint8_t *input = application_take_pin_input();
+    bool areEqual = security_system_control_check_pin_code(input);
+    free(input);
+    if (areEqual) {
+        char *message = security_system_control_toggle_status(false);
+        pc_comm_send_string_blocking(message);
+        connection_control_send_message(message);
+        free(message);
+        display_control_write_word("OK");
+    } else {
+        pc_comm_send_string_blocking("Err\n");
+        display_control_write_word("Err");
+    }
 }
 
 void apllication_on_message_received_callback(char *buffer) {
@@ -135,13 +134,14 @@ void apllication_on_message_received_callback(char *buffer) {
   }
 }
 
-void application_pir_callback() {
+void application_pir_callback() 
+{
   connection_control_send_message("Motion Detected");
   pc_comm_send_string_blocking("Motion Detected\n");
 }
 
 void application_init() {
-  //pc_comm_init(9600, NULL);
+  pc_comm_init(9600, NULL);
   display_control_init();
   connection_control_init(apllication_on_message_received_callback);
   security_system_control_init(application_pir_callback);

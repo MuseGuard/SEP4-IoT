@@ -21,29 +21,29 @@ void tearDown(void) {}
 server_callback_t callback_fake;
 
 void test_connection_control_init_success(void) {
-  // TEST_ASSERT_EQUAL(1, 0);
-  wifi_command_join_AP_fake.return_val = WIFI_OK;
-  wifi_command_create_TCP_connection_fake.return_val = WIFI_OK;
+    // TEST_ASSERT_EQUAL(1, 0);
+    wifi_command_join_AP_fake.return_val = WIFI_OK;
+    wifi_command_create_TCP_connection_fake.return_val = WIFI_OK;
 
-  bool result = connection_control_init(callback_fake);
+    bool result = connection_control_init(callback_fake);
 
-  TEST_ASSERT_TRUE(result);
-  TEST_ASSERT_EQUAL(1, wifi_command_join_AP_fake.call_count);
-  // TEST_ASSERT_EQUAL_STRING("madinnit", wifi_command_join_AP_fake.arg0_val);
-  // TEST_ASSERT_EQUAL_STRING("12345678", wifi_command_join_AP_fake.arg1_val);
+    TEST_ASSERT_TRUE(result);
+    TEST_ASSERT_EQUAL(1, wifi_command_join_AP_fake.call_count);
+    // TEST_ASSERT_EQUAL_STRING("madinnit", wifi_command_join_AP_fake.arg0_val);
+    // TEST_ASSERT_EQUAL_STRING("12345678", wifi_command_join_AP_fake.arg1_val);
 
-  TEST_ASSERT_EQUAL(1, wifi_command_create_TCP_connection_fake.call_count);
-  // TEST_ASSERT_EQUAL_STRING("192.168.214.218",
-  // wifi_command_create_TCP_connection_fake.arg0_val);
-  // TEST_ASSERT_EQUAL_UINT16(23,
-  // wifi_command_create_TCP_connection_fake.arg1_val);
+    TEST_ASSERT_EQUAL(1, wifi_command_create_TCP_connection_fake.call_count);
+    // TEST_ASSERT_EQUAL_STRING("192.168.214.218",
+    // wifi_command_create_TCP_connection_fake.arg0_val);
+    // TEST_ASSERT_EQUAL_UINT16(23,
+    // wifi_command_create_TCP_connection_fake.arg1_val);
 
-  TEST_ASSERT_EQUAL_STRING("Connected to AP!\n",
-                           pc_comm_send_string_blocking_fake.arg0_history[0]);
-  TEST_ASSERT_EQUAL_STRING("Connected to server!\n",
-                           pc_comm_send_string_blocking_fake.arg0_history[1]);
+    TEST_ASSERT_EQUAL_STRING("Connected to AP!\n",
+                            pc_comm_send_string_blocking_fake.arg0_history[0]);
+    TEST_ASSERT_EQUAL_STRING("Connected to server!\n",
+                            pc_comm_send_string_blocking_fake.arg0_history[1]);
 
-  TEST_ASSERT_EQUAL(1, wifi_command_create_TCP_connection_fake.call_count);
+    TEST_ASSERT_EQUAL(1, wifi_command_create_TCP_connection_fake.call_count);
 }
 
 void test_connection_control_init_fail_TCP_connection(void) {
