@@ -1,3 +1,4 @@
+#pragma once
 #include <stdint.h>
 
 void buttons_control_init();

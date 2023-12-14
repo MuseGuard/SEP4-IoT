@@ -1,3 +1,4 @@
+#pragma once
 #include <stdint.h>
 
 void display_control_init(void);

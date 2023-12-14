@@ -33,19 +33,22 @@ jobs:
         run: pio test -e win_test_light -f "test_win_light"
 
       - name: Run Connection Control Test.
-        run: pio test -e win_test_connection_control -f "test_connection_control"
+        run: pio test -e win_test_control_module -f "test_connection_control"
 
       - name: Run Monitoring Control Test.
-        run: pio test -e win_test_monitoring_control -f "test_monitoring_control" 
+        run: pio test -e win_test_control_module -f "test_monitoring_control" 
 
       - name: Run Security Control Test.
-        run: pio test -e win_test_security_control -f "test_security_control"
+        run: pio test -e win_test_control_module -f "test_security_control"
 
       - name: Run Display Control Test.
-        run: pio test -e win_test_display_control -f "test_display_control"
+        run: pio test -e win_test_control_module -f "test_display_control"
 
       - name: Run Buttons Control Test.
-        run: pio test -e win_test_buttons_control -f "test_buttons_control"           
+        run: pio test -e win_test_control_module -f "test_buttons_control"   
+
+      - name: Run Application Test.
+        run: pio test -e win_test_application -f "test_application"        
 
       - name: Build The Project.
         run: pio run -e ATmega2560

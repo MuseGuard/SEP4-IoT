@@ -136,8 +136,8 @@ void apllication_on_message_received_callback(char *buffer) {
 
 void application_pir_callback() 
 {
-  connection_control_send_message("Motion Detected");
-  pc_comm_send_string_blocking("Motion Detected\n");
+  connection_control_send_message("MOTION DETECTED");
+  pc_comm_send_string_blocking("MOTION DETECTED\n");
 }
 
 void application_init() {
